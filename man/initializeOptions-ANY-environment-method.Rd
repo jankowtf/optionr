@@ -5,10 +5,10 @@
 \alias{initializeOptions-any-environment-method}
 \title{Initialize Options (any-envir)}
 \usage{
-\S4method{initializeOptions}{ANY,environment}(main = "options", where, ...)
+\S4method{initializeOptions}{ANY,environment}(id = "options", where, ...)
 }
 \arguments{
-\item{main}{\code{\link{ANY}}.}
+\item{id}{\code{\link{ANY}}.}
 
 \item{where}{\code{\link{environment}}.}
 
@@ -23,7 +23,15 @@ See generic: \code{\link[reactr]{initializeOptions}}
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(where = container)
+exists("options", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(id = "OPTIONS", where = container)
+exists("OPTIONS", container)
 
 }
 }

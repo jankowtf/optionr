@@ -3,12 +3,12 @@
 \alias{getOptionContainer}
 \title{Get Option Container (generic)}
 \usage{
-getOptionContainer(main = tryCatch(devtools::as.package(".")$package, error =
-  function(cond) {     stop("Invalid default value for `main`") }),
+getOptionContainer(id = tryCatch(devtools::as.package(".")$package, error =
+  function(cond) {     stop("Invalid default value for `id`") }),
   hidden = TRUE, ...)
 }
 \arguments{
-\item{main}{\strong{Signature argument}.
+\item{id}{\strong{Signature argument}.
 Object containing suitable information to control the actual retrieval
 process.
 In the simplest case, this corresponds
@@ -16,9 +16,9 @@ to the name/ID of a package/package project. But it can also be an
 instance of a custom class for which a suitable methods are defined.}
 
 \item{hidden}{\code{\link{logical}}.
-\code{TRUE}: make sure name/ID information in \code{main}
+\code{TRUE}: make sure name/ID information in \code{id}
 is preprended with a dot as the container was assigned with \code{hidden = TRUE};
-\code{FALSE}: use name/ID information in \code{main} as is.}
+\code{FALSE}: use name/ID information in \code{id} as is.}
 
 \item{...}{Further arguments to be passed to subsequent functions/methods.}
 }
@@ -30,7 +30,7 @@ container from the list of R options.
 \dontrun{
 
 ##------------------------------------------------------------------------------
-## Default `main` //
+## Default `id` //
 ##------------------------------------------------------------------------------
 
 res <- ensureOptionContainer(overwrite = TRUE)
@@ -46,12 +46,12 @@ identical(getOptionContainer(hidden = FALSE), res)
 options("optionr" = NULL)
   
 ##------------------------------------------------------------------------------
-## Interface test //
+## As interface //
 ##------------------------------------------------------------------------------
   
-main <- structure(list(id = "test"), class = "OptionContext.Test")
-res <- ensureOptionContainer(main, hidden = FALSE, overwrite = TRUE)
-identical(getOptionContainer(main, hidden = FALSE), res)
+id <- structure(list(id = "test"), class = "OptionContext.Test")
+res <- ensureOptionContainer(id, hidden = FALSE, overwrite = TRUE)
+identical(getOptionContainer(id, hidden = FALSE), res)
 options("test" = NULL)
   
 }

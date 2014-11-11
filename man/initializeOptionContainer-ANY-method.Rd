@@ -6,24 +6,24 @@
 \title{Initialize Option Container (any)}
 \usage{
 
-  \S4method{initializeOptionContainer}{ANY}(main = tryCatch(devtools::as.package(".")$package,
-  error = function(cond) {     stop("Invalid default value for `main`") }),
+  \S4method{initializeOptionContainer}{ANY}(id = tryCatch(devtools::as.package(".")$package,
+  error = function(cond) {     stop("Invalid default value for `id`") }),
   components = c("options", ".meta", ".registry"), check = TRUE,
   hidden = TRUE, overwrite = FALSE, ...)
 }
 \arguments{
-\item{main}{\code{\link{ANY}}.}
+\item{id}{\code{\link{ANY}}.}
 
 \item{check}{\code{\link{logical}}.
 \code{TRUE}: check if an R option with name/ID according to the information
-in \code{main} already exists (in which case an error is thrown);
+in \code{id} already exists (in which case an error is thrown);
 \code{FALSE}: no check for existing R options.
 Note that \code{overwrite} will overrule \code{check}.}
 
 \item{hidden}{\code{\link{logical}}.
-\code{TRUE}: make sure name/ID information in \code{main}
+\code{TRUE}: make sure name/ID information in \code{id}
 is preprended with a dot to hide it;
-\code{FALSE}: use name/ID information in \code{main} as is.
+\code{FALSE}: use name/ID information in \code{id} as is.
 The former reduces the risk of accidentially overwriting existing R
 options and thus is used by default.}
 
@@ -43,7 +43,7 @@ See generic: \code{\link[optionr]{initializeOptionContainer}}
 \dontrun{
 
 ##------------------------------------------------------------------------------
-## Default `main` //
+## Default `id` //
 ##------------------------------------------------------------------------------
   
 ## Make sure initial options are `NULL` //
@@ -59,68 +59,68 @@ opts$.registry
 options("optionr" = NULL)
 
 ##------------------------------------------------------------------------------
-## Explicit character `main` //
+## Explicit character `id` //
 ##------------------------------------------------------------------------------
   
-main <- "test"
-options(main = NULL)
+id <- "test"
+options(id = NULL)
 
-initializeOptionContainer(main)
-opts <- getOption(main)
+initializeOptionContainer(id)
+opts <- getOption(id)
 opts$options  
 opts$.meta  
 opts$.registry
 
 ## Clean up //
-options(main = NULL)
+options(id = NULL)
   
 ##------------------------------------------------------------------------------
 ## Partial 
 ##------------------------------------------------------------------------------
 
-main <- "test"
-options(main = NULL)
-initializeOptionContainer(main, components = "options")
-opts <- getOption(main)
+id <- "test"
+options(id = NULL)
+initializeOptionContainer(id, components = "options")
+opts <- getOption(id)
 opts$options  
 opts$.meta
 ## --> not created
 opts$.registry
 ## --> not created
 
-initializeOptionContainer(main, components = c("options", ".meta"), 
+initializeOptionContainer(id, components = c("options", ".meta"), 
   overwrite = TRUE)
-opts <- getOption(main)
+opts <- getOption(id)
 opts$options  
 opts$.meta
 opts$.registry
 ## --> not created
 
 ## Condition handling //
-initializeOptionContainer(main, components = c("nonexisting", "options"), 
+initializeOptionContainer(id, components = c("nonexisting", "options"), 
   overwrite = TRUE)
-opts <- getOption(main)
+opts <- getOption(id)
 ls(opts, all.names = TRUE)
 
 ## Clean up //
-options(main = NULL)
+options(id = NULL)
   
 ##------------------------------------------------------------------------------
 ## As interface //
 ##------------------------------------------------------------------------------
 
 ## Example of how custom classes can be used for creating custom methods //
-main <- structure(list(id = "test"), class = "OptionContext.Test")
-main
+id <- structure(list(id = "test"), class = "OptionContext.Test")
+id
 
 options("test" = NULL)
-initializeOptionContainer(main)
+initializeOptionContainer(id)
 ## --> calls `initializeOptions()`, `initializeMeta()` and `initializeRegistry()`
-## and for each of which methods for signature `main` can be defined
+## and for each of which methods for signature `id` can be defined
 
-getOption(main$id)$options  
-getOption(main$id)$.meta  
-getOption(main$id)$.registry  
+getOption(id$id)$options  
+getOption(id$id)$.meta  
+getOption(id$id)$.registry  
 options("test" = NULL)
 
 }

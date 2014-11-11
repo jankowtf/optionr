@@ -55,7 +55,7 @@
 #'    \code{FALSE}: set regular/non-reactive option.
 #'    Note that if \code{value = reactiveOption()}, \code{reactive} is automatically
 #'    set to \code{TRUE}.
-#' @template Further arguments to be passed along to subsequent functions.
+#' @param Further arguments to be passed along to subsequent functions.
 #'    In particular: 
 #'    \code{\link[reactr]{setShinyReactive}}.
 #' @example inst/examples/setRegistryValue.r

@@ -5,11 +5,10 @@
 \alias{initializeOptions-missing-environment-method}
 \title{Initialize Options (miss-envir)}
 \usage{
-\S4method{initializeOptions}{missing,environment}(main = "options", where,
-  ...)
+\S4method{initializeOptions}{missing,environment}(id = "options", where, ...)
 }
 \arguments{
-\item{main}{\code{\link{missing}}.}
+\item{id}{\code{\link{missing}}.}
 
 \item{where}{\code{\link{environment}}.}
 
@@ -25,7 +24,15 @@ See generic: \code{\link[reactr]{initializeOptions}}
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(where = container)
+exists("options", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(id = "OPTIONS", where = container)
+exists("OPTIONS", container)
 
 }
 }

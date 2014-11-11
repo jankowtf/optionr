@@ -5,26 +5,26 @@
 \title{Ensure Option Container (any-miss)}
 \usage{
 
-  \S4method{getOptionContainer}{ANY}(main = tryCatch(devtools::as.package(".")$package,
-  error = function(cond) {     stop("Invalid default value for `main`") }),
+  \S4method{getOptionContainer}{ANY}(id = tryCatch(devtools::as.package(".")$package,
+  error = function(cond) {     stop("Invalid default value for `id`") }),
   hidden = TRUE, ...)
 
 
-  \S4method{getOptionContainer}{ANY}(main = tryCatch(devtools::as.package(".")$package,
-  error = function(cond) {     stop("Invalid default value for `main`") }),
+  \S4method{getOptionContainer}{ANY}(id = tryCatch(devtools::as.package(".")$package,
+  error = function(cond) {     stop("Invalid default value for `id`") }),
   hidden = TRUE, ...)
 }
 \arguments{
-\item{main}{\code{\link{ANY}}.}
+\item{id}{\code{\link{ANY}}.}
 
 \item{hidden}{\code{\link{logical}}.
-\code{TRUE}: make sure name/ID information in \code{main}
+\code{TRUE}: make sure name/ID information in \code{id}
 is preprended with a dot as the container was assigned with \code{hidden = TRUE};
-\code{FALSE}: use name/ID information in \code{main} as is.}
+\code{FALSE}: use name/ID information in \code{id} as is.}
 
 \item{...}{Further arguments to be passed to subsequent functions/methods.}
 
-\item{main}{\code{\link{ANY}}.}
+\item{id}{\code{\link{ANY}}.}
 }
 \value{
 \code{\link{logical}}. \code{TRUE}.
@@ -40,7 +40,7 @@ See generic: \code{\link[rapp]{getOptionContainer}}
 \dontrun{
 
 ##------------------------------------------------------------------------------
-## Default `main` //
+## Default `id` //
 ##------------------------------------------------------------------------------
 
 res <- ensureOptionContainer(overwrite = TRUE)
@@ -56,19 +56,19 @@ identical(getOptionContainer(hidden = FALSE), res)
 options("optionr" = NULL)
   
 ##------------------------------------------------------------------------------
-## Interface test //
+## As interface //
 ##------------------------------------------------------------------------------
   
-main <- structure(list(id = "test"), class = "OptionContext.Test")
-res <- ensureOptionContainer(main, hidden = FALSE, overwrite = TRUE)
-identical(getOptionContainer(main, hidden = FALSE), res)
+id <- structure(list(id = "test"), class = "OptionContext.Test")
+res <- ensureOptionContainer(id, hidden = FALSE, overwrite = TRUE)
+identical(getOptionContainer(id, hidden = FALSE), res)
 options("test" = NULL)
   
 }
 \dontrun{
 
 ##------------------------------------------------------------------------------
-## Default `main` //
+## Default `id` //
 ##------------------------------------------------------------------------------
 
 res <- ensureOptionContainer(overwrite = TRUE)
@@ -84,12 +84,12 @@ identical(getOptionContainer(hidden = FALSE), res)
 options("optionr" = NULL)
   
 ##------------------------------------------------------------------------------
-## Interface test //
+## As interface //
 ##------------------------------------------------------------------------------
   
-main <- structure(list(id = "test"), class = "OptionContext.Test")
-res <- ensureOptionContainer(main, hidden = FALSE, overwrite = TRUE)
-identical(getOptionContainer(main, hidden = FALSE), res)
+id <- structure(list(id = "test"), class = "OptionContext.Test")
+res <- ensureOptionContainer(id, hidden = FALSE, overwrite = TRUE)
+identical(getOptionContainer(id, hidden = FALSE), res)
 options("test" = NULL)
   
 }

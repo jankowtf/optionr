@@ -5,11 +5,11 @@
 \alias{initializeRegistry-character-environment-method}
 \title{Initialize Registry (char-envir)}
 \usage{
-\S4method{initializeRegistry}{character,environment}(main = ".registry",
-  where, ...)
+\S4method{initializeRegistry}{character,environment}(id = ".registry", where,
+  ...)
 }
 \arguments{
-\item{main}{\code{\link{character}}.}
+\item{id}{\code{\link{character}}.}
 
 \item{where}{\code{\link{environment}}.}
 
@@ -24,7 +24,15 @@ See generic: \code{\link[reactr]{initializeRegistry}}
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeRegistry(where = container)
+exists(".registry", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeRegistry(id = "REGISTRY", where = container)
+exists("REGISTRY", container)
 
 }
 }

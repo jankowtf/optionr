@@ -5,10 +5,10 @@
 \alias{initializeMeta-any-environment-method}
 \title{Initialize Meta Information (any-envir)}
 \usage{
-\S4method{initializeMeta}{ANY,environment}(main = ".meta", where, ...)
+\S4method{initializeMeta}{ANY,environment}(id = ".meta", where, ...)
 }
 \arguments{
-\item{main}{\code{\link{ANY}}.}
+\item{id}{\code{\link{ANY}}.}
 
 \item{where}{\code{\link{environment}}.}
 
@@ -23,7 +23,15 @@ See generic: \code{\link[reactr]{initializeMeta}}
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeMeta(where = container)
+exists(".meta", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeMeta(id = "META", where = container)
+exists("META", container)
 
 }
 }

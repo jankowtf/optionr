@@ -3,13 +3,13 @@
 \alias{ensureOptionContainer}
 \title{Ensure Option Container (generic)}
 \usage{
-ensureOptionContainer(main = tryCatch(devtools::as.package(".")$package, error
-  = function(cond) {     stop("Invalid default value for `main`") }),
+ensureOptionContainer(id = tryCatch(devtools::as.package(".")$package, error =
+  function(cond) {     stop("Invalid default value for `id`") }),
   container = new.env(), check = TRUE, hidden = TRUE, overwrite = FALSE,
   ...)
 }
 \arguments{
-\item{main}{\strong{Signature argument}.
+\item{id}{\strong{Signature argument}.
 Object containing suitable information to control the actual ensurance
 process.
 In the simplest case, this corresponds
@@ -21,14 +21,14 @@ Object containing container information.}
 
 \item{check}{\code{\link{logical}}.
 \code{TRUE}: check if an R option with name/ID according to the information
-in \code{main} already exists (in which case an error is thrown);
+in \code{id} already exists (in which case an error is thrown);
 \code{FALSE}: no check for existing R options.
 Note that \code{overwrite} will overrule \code{check}.}
 
 \item{hidden}{\code{\link{logical}}.
-\code{TRUE}: make sure name/ID information in \code{main}
+\code{TRUE}: make sure name/ID information in \code{id}
 is preprended with a dot to hide it;
-\code{FALSE}: use name/ID information in \code{main} as is.
+\code{FALSE}: use name/ID information in \code{id} as is.
 The former reduces the risk of accidentially overwriting existing R
 options and thus is used by default.}
 
@@ -41,13 +41,13 @@ options and thus is used by default.}
 \description{
 Ensures the existence of an \code{environment} that serves as an option
 container. The container will be assigned to R option based on signature
-argument \code{main}.
+argument \code{id}.
 }
 \examples{
 \dontrun{
 
 ##------------------------------------------------------------------------------
-## Default `main` //
+## Default `id` //
 ##------------------------------------------------------------------------------
 
 options(".optionr" = NULL)
@@ -85,15 +85,15 @@ try(ensureOptionContainer(check = TRUE))
 options(".optionr" = NULL)
 
 ##------------------------------------------------------------------------------
-"ensureOptionContainer/interface test")
+## As interface //
 ##------------------------------------------------------------------------------
   
-main <- structure(list(id = "test"), class = "OptionContext.Test")
+id <- structure(list(id = "test"), class = "OptionContext.Test")
 options("test" = NULL)
 
-res <- ensureOptionContainer(main, hide = FALSE)
+res <- ensureOptionContainer(id, hide = FALSE)
 "test" \%in\% names(options())
-identical(getOption(main$id), res)  
+identical(getOption(id$id), res)  
 
 ## Clean up //
 options("test" = NULL)

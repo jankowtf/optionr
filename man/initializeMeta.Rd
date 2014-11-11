@@ -3,10 +3,10 @@
 \alias{initializeMeta}
 \title{Initialize Meta Information (generic)}
 \usage{
-initializeMeta(main = ".meta", where, ...)
+initializeMeta(id = ".meta", where, ...)
 }
 \arguments{
-\item{main}{\strong{Signature argument}.
+\item{id}{\strong{Signature argument}.
 Object containing ID information.}
 
 \item{where}{\strong{Signature argument}.
@@ -21,7 +21,15 @@ option container.
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeMeta(where = container)
+exists(".meta", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeMeta(id = "META", where = container)
+exists("META", container)
 
 }
 }

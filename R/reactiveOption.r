@@ -10,7 +10,7 @@
 #'    The parent environment for the reactive expression. 
 #'    By default, this is the calling environment, the same as when defining 
 #'    an ordinary non-reactive expression.
-#' @template Further arguments to be passed along to subsequent functions. 
+#' @param Further arguments to be passed along to subsequent functions. 
 #'    In particular:
 #'    \code{\link[reactr]{reactiveExpression}}.
 #' @example inst/examples/reactiveOption.r

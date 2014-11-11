@@ -3,10 +3,10 @@
 \alias{initializeOptions}
 \title{Initialize Options (generic)}
 \usage{
-initializeOptions(main = "options", where, ...)
+initializeOptions(id = "options", where, ...)
 }
 \arguments{
-\item{main}{\strong{Signature argument}.
+\item{id}{\strong{Signature argument}.
 Object containing ID information.}
 
 \item{where}{\strong{Signature argument}.
@@ -21,7 +21,15 @@ option container.
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(where = container)
+exists("options", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(id = "OPTIONS", where = container)
+exists("OPTIONS", container)
 
 }
 }

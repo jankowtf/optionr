@@ -5,11 +5,11 @@
 \alias{initializeOptions-character-environment-method}
 \title{Initialize Options (char-envir)}
 \usage{
-\S4method{initializeOptions}{character,environment}(main = "options", where,
+\S4method{initializeOptions}{character,environment}(id = "options", where,
   ...)
 }
 \arguments{
-\item{main}{\code{\link{character}}.}
+\item{id}{\code{\link{character}}.}
 
 \item{where}{\code{\link{environment}}.}
 
@@ -24,7 +24,15 @@ See generic: \code{\link[reactr]{initializeOptions}}
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(where = container)
+exists("options", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(id = "OPTIONS", where = container)
+exists("OPTIONS", container)
 
 }
 }

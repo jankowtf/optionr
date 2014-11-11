@@ -5,10 +5,10 @@
 \alias{initializeMeta-missing-missing-method}
 \title{Initialize Meta Information (miss-miss)}
 \usage{
-\S4method{initializeMeta}{missing,missing}(main = ".meta", where, ...)
+\S4method{initializeMeta}{missing,missing}(id = ".meta", where, ...)
 }
 \arguments{
-\item{main}{\code{\link{missing}}.}
+\item{id}{\code{\link{missing}}.}
 
 \item{where}{\code{\link{missing}}.}
 
@@ -24,7 +24,15 @@ See generic: \code{\link[reactr]{initializeMeta}}
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeMeta(where = container)
+exists(".meta", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeMeta(id = "META", where = container)
+exists("META", container)
 
 }
 }

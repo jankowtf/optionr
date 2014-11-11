@@ -5,10 +5,10 @@
 \alias{initializeOptions-missing-missing-method}
 \title{Initialize Options (miss-miss)}
 \usage{
-\S4method{initializeOptions}{missing,missing}(main = "options", where, ...)
+\S4method{initializeOptions}{missing,missing}(id = "options", where, ...)
 }
 \arguments{
-\item{main}{\code{\link{missing}}.}
+\item{id}{\code{\link{missing}}.}
 
 \item{where}{\code{\link{missing}}.}
 
@@ -24,7 +24,15 @@ See generic: \code{\link[reactr]{initializeOptions}}
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(where = container)
+exists("options", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeOptions(id = "OPTIONS", where = container)
+exists("OPTIONS", container)
 
 }
 }

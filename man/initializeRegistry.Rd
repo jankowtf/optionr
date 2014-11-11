@@ -3,10 +3,10 @@
 \alias{initializeRegistry}
 \title{Initialize Registry (generic)}
 \usage{
-initializeRegistry(main = ".registry", where, ...)
+initializeRegistry(id = ".registry", where, ...)
 }
 \arguments{
-\item{main}{\strong{Signature argument}.
+\item{id}{\strong{Signature argument}.
 Object containing ID information.}
 
 \item{where}{\strong{Signature argument}.
@@ -21,7 +21,15 @@ option container.
 \examples{
 \dontrun{
 
-## TODO: add example
+## Default `id` //  
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeRegistry(where = container)
+exists(".registry", container)
+
+## Different `id` //
+container <- ensureOptionContainer(overwrite = TRUE)  
+initializeRegistry(id = "REGISTRY", where = container)
+exists("REGISTRY", container)
 
 }
 }
