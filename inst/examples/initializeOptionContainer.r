@@ -73,7 +73,7 @@ id
 
 options("test" = NULL)
 initializeOptionContainer(id)
-## --> calls `initializeOptions()`, `initializeMeta()` and `initializeRegistry()`
+## --> calls `initializeProjectOptions()`, `initializeMeta()` and `initializeRegistry()`
 ## and for each of which methods for signature `id` can be defined
 
 getOption(id$id)$options  

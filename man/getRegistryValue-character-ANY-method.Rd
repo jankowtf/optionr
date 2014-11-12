@@ -3,7 +3,7 @@
 \name{getRegistryValue,character,ANY-method}
 \alias{getRegistryValue,character,ANY-method}
 \alias{getRegistryValue-char-any-method}
-\title{Get Option (char-any)}
+\title{Get Registry Value (char-any)}
 \usage{
 \S4method{getRegistryValue}{character,ANY}(id,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
@@ -41,10 +41,10 @@ See generic: \code{\link[optionr]{getRegistryValue}}
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{

@@ -2,7 +2,7 @@
 \docType{methods}
 \name{initializeRegistry,ANY,environment-method}
 \alias{initializeRegistry,ANY,environment-method}
-\alias{initializeRegistry-any-environment-method}
+\alias{initializeRegistry-any-env-method}
 \title{Initialize Registry (any-envir)}
 \usage{
 \S4method{initializeRegistry}{ANY,environment}(id = ".registry", where, ...)
@@ -18,7 +18,7 @@
 \code{\link{environment}}. Initialized registry.
 }
 \description{
-See generic: \code{\link[reactr]{initializeRegistry}}
+See generic: \code{\link[optionr]{initializeRegistry}}
 }
 \examples{
 \dontrun{
@@ -36,15 +36,14 @@ exists("REGISTRY", container)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-   \link[reactr]{initializeRegistry},
-    \link[reactr]{getRegistry}
+   \link[optionr]{initializeRegistry}
 }
 }
 

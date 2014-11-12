@@ -19,7 +19,7 @@ In particular:
 }
 \description{
 Creates a reactive option expression. This is a convenience/encapsulation
-wrapper around \code{\link[reactr]{reactiveOption}}.
+wrapper around \code{\link[reactr]{reactiveExpression}}.
 }
 \examples{
 \dontrun{
@@ -29,10 +29,10 @@ wrapper around \code{\link[reactr]{reactiveOption}}.
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{

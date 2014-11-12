@@ -2,7 +2,7 @@
 \docType{methods}
 \name{initializeMeta,character,environment-method}
 \alias{initializeMeta,character,environment-method}
-\alias{initializeMeta-character-environment-method}
+\alias{initializeMeta-char-env-method}
 \title{Initialize Meta Information (char-envir)}
 \usage{
 \S4method{initializeMeta}{character,environment}(id = ".meta", where, ...)
@@ -18,7 +18,7 @@
 \code{\link{environment}}. Environment containing the options.
 }
 \description{
-See generic: \code{\link[reactr]{initializeMeta}}
+See generic: \code{\link[optionr]{initializeMeta}}
 }
 \examples{
 \dontrun{
@@ -36,15 +36,14 @@ exists("META", container)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-   \link[reactr]{initializeMeta},
-    \link[reactr]{getRegistry}
+   \link[optionr]{initializeMeta}
 }
 }
 

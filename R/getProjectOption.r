@@ -2,22 +2,20 @@
 #' Get Project Option (generic)
 #'
 #' @description 
-#' Retrieves option from the an option container or
-#' any of it subcontainers based on a path-like identifier 
-#' (e.g. \code{"container/subcontainer/option_name"}.
+#' Retrieves project option from the respective environment for option values
+#' inside an option container (see \code{\link[optionr]{initializeOptionContainer}}).
 #' 
-#' @details
-#' Values for \code{id} are expected to be of structure \code{a/b/c/.../z},
-#' i.e. being a path-like identifier with a slash used as separator. 
-#' The identifier is transformed to \code{a$b$c$...$z} and then in turn to a
-#' valid \emph{get} expression (\code{getProjectOptionContainer(...)$a$b$c$...$z}).
+#' @template path-like-ids
 #'   	
 #' @param id \strong{Signature argument}.
 #'    Object containing path-like name/ID information.
 #' @param where \strong{Signature argument}.
 #'    Object containing information about the location of the option container
 #'    that is to be used. Typically, this either corresponds to the name/ID
-#'    of a package/package project or an instance of a custom class.  
+#'    of a package/package project or an instance of a custom class for which
+#'    suitable methods in the context of managing options are defined 
+#'    (see other methods of this package that have signature arguments 
+#'    \code{id} or \code{where}).  
 #' @param default \code{\link{ANY}}. 
 #'    Value to be returned if option does not exist. 
 #'    See \code{\link[base]{getProjectOption}}.
@@ -28,7 +26,9 @@
 #' @template threedots
 #' @example inst/examples/getProjectOption.r
 #' @seealso \code{
-#'   	\link[optionr]{getProjectOption-character-method}
+#'   	\link[optionr]{getProjectOption-char-char-method},
+#'    \link[optionr]{setProjectOption},
+#'    \link[optionr]{rmProjectOption}
 #' }
 #' @template author
 #' @template references
@@ -54,7 +54,7 @@ setGeneric(
 )
 
 #' @title
-#' Get Option (char-miss)
+#' Get Project Option (char-miss)
 #'
 #' @description 
 #' See generic: \code{\link[optionr]{getProjectOption}}
@@ -98,7 +98,7 @@ setMethod(
 )
 
 #' @title
-#' Get Option (char-any)
+#' Get Project Option (char-any)
 #'
 #' @description 
 #' See generic: \code{\link[optionr]{getProjectOption}}
@@ -131,7 +131,7 @@ setMethod(
     ...
   ) {
  
-  getFreeOption(
+  getAnywhereOption(
     id = file.path("options", id),
     where = where$id,
     default = default,
@@ -143,7 +143,7 @@ setMethod(
 )
 
 #' @title
-#' Get Option (char-char)
+#' Get Project Option (char-char)
 #'
 #' @description 
 #' See generic: \code{\link[optionr]{getProjectOption}}
@@ -176,7 +176,7 @@ setMethod(
     ...
   ) {
 
-  getFreeOption(
+  getAnywhereOption(
     id = file.path("options", id),
     where = where,
     default = default,

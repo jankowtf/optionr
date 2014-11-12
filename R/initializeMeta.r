@@ -12,8 +12,10 @@
 #' @template threedots
 #' @example inst/examples/initializeMeta.r
 #' @seealso \code{
-#'   	\link[reactr]{initializeMeta-NULL-method},
-#'     \link[reactr]{getRegistry}
+#'   	\link[optionr]{initializeMeta-char-char-method},
+#'    \link[optionr]{setMetaValue},
+#'    \link[optionr]{getMetaValue},
+#'    \link[optionr]{rmtMetaValue}
 #' }
 #' @template author
 #' @template references
@@ -36,22 +38,24 @@ setGeneric(
 #' Initialize Meta Information (miss-miss)
 #'
 #' @description 
-#' See generic: \code{\link[reactr]{initializeMeta}}
+#' See generic: \code{\link[optionr]{initializeMeta}}
 #'      
 #' @inheritParams initializeMeta
 #' @param id \code{\link{missing}}.
 #' @param where \code{\link{missing}}.
 #' @return See method
-#'    \code{\link[reactr]{initializeMeta-NULL-method}}.
+#'    \code{\link[optionr]{initializeMeta-char-env-method}}.
 #' @example inst/examples/initializeMeta.r
 #' @seealso \code{
-#'    \link[reactr]{initializeMeta-NULL-method},
-#'     \link[reactr]{getRegistry}
+#'    \link[optionr]{initializeMeta-char-env-method},
+#'    \link[optionr]{setMetaValue},
+#'    \link[optionr]{getMetaValue},
+#'    \link[optionr]{rmMetaValue}
 #' }
 #' @template author
 #' @template references
+#' @aliases initializeMeta-miss-miss-method
 #' @export
-#' @aliases initializeMeta-missing-missing-method
 setMethod(
   f = "initializeMeta", 
   signature = signature(
@@ -77,22 +81,21 @@ setMethod(
 #' Initialize Meta Information (miss-envir)
 #'
 #' @description 
-#' See generic: \code{\link[reactr]{initializeMeta}}
+#' See generic: \code{\link[optionr]{initializeMeta}}
 #'      
 #' @inheritParams initializeMeta
 #' @param id \code{\link{missing}}.
 #' @param where \code{\link{environment}}.
 #' @return See method
-#'    \code{\link[reactr]{initializeMeta-NULL-method}}.
+#'    \code{\link[optionr]{initializeMeta-char-env-method}}.
 #' @example inst/examples/initializeMeta.r
 #' @seealso \code{
-#'    \link[reactr]{initializeMeta-NULL-method},
-#'     \link[reactr]{getRegistry}
+#'    \link[optionr]{initializeMeta}
 #' }
 #' @template author
 #' @template references
+#' @aliases initializeMeta-miss-env-method
 #' @export
-#' @aliases initializeMeta-missing-environment-method
 setMethod(
   f = "initializeMeta", 
   signature = signature(
@@ -118,7 +121,7 @@ setMethod(
 #' Initialize Meta Information (any-envir)
 #'
 #' @description 
-#' See generic: \code{\link[reactr]{initializeMeta}}
+#' See generic: \code{\link[optionr]{initializeMeta}}
 #'      
 #' @inheritParams initializeMeta
 #' @param id \code{\link{ANY}}.
@@ -126,12 +129,11 @@ setMethod(
 #' @return \code{\link{environment}}. Environment containing the options.
 #' @example inst/examples/initializeMeta.r
 #' @seealso \code{
-#'    \link[reactr]{initializeMeta},
-#'     \link[reactr]{getRegistry}
+#'    \link[optionr]{initializeMeta}
 #' }
 #' @template author
 #' @template references
-#' @aliases initializeMeta-any-environment-method
+#' @aliases initializeMeta-any-env-method
 #' @export
 setMethod(
   f = "initializeMeta", 
@@ -154,7 +156,7 @@ setMethod(
 #' Initialize Meta Information (char-envir)
 #'
 #' @description 
-#' See generic: \code{\link[reactr]{initializeMeta}}
+#' See generic: \code{\link[optionr]{initializeMeta}}
 #'      
 #' @inheritParams initializeMeta
 #' @param id \code{\link{character}}.
@@ -162,13 +164,12 @@ setMethod(
 #' @return \code{\link{environment}}. Environment containing the options.
 #' @example inst/examples/initializeMeta.r
 #' @seealso \code{
-#'    \link[reactr]{initializeMeta},
-#'     \link[reactr]{getRegistry}
+#'    \link[optionr]{initializeMeta}
 #' }
 #' @template author
 #' @template references
+#' @aliases initializeMeta-char-env-method
 #' @export
-#' @aliases initializeMeta-character-environment-method
 setMethod(
   f = "initializeMeta", 
   signature = signature(

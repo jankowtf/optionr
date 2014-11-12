@@ -2,7 +2,8 @@
 \docType{methods}
 \name{getOptionContainer,character-method}
 \alias{getOptionContainer,character-method}
-\title{Ensure Option Container (char-env)}
+\alias{getOptionContainer-char-method}
+\title{Get Option Container (char)}
 \usage{
 
   \S4method{getOptionContainer}{character}(id = tryCatch(devtools::as.package(".")$package,
@@ -23,7 +24,7 @@ is preprended with a dot as the container was assigned with \code{hidden = TRUE}
 \code{\link{logical}}. \code{TRUE}.
 }
 \description{
-See generic: \code{\link[rapp]{getOptionContainer}}
+See generic: \code{\link[optionr]{getOptionContainer}}
 }
 \examples{
 \dontrun{
@@ -56,14 +57,14 @@ options("test" = NULL)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-   \link[rapp]{getOptionContainer}
+   \link[optionr]{getOptionContainer}
 }
 }
 

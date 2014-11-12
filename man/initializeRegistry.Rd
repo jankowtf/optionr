@@ -34,15 +34,17 @@ exists("REGISTRY", container)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-  	\link[reactr]{initializeRegistry-NULL-method},
-    \link[reactr]{getRegistry}
+  	\link[optionr]{initializeRegistry-char-env-method},
+   \link[optionr]{setRegistryValue},
+   \link[optionr]{getRegistryValue},
+   \link[optionr]{rmRegistryValue}
 }
 }
 

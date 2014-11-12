@@ -14,7 +14,10 @@ Object containing path-like name/ID information.}
 \item{where}{\strong{Signature argument}.
 Object containing information about the location of the option container
 that is to be used. Typically, this either corresponds to the name/ID
-of a package/package project or an instance of a custom class.}
+of a package/package project or an instance of a custom class for which
+suitable methods in the context of managing options are defined
+(see other methods of this package that have signature arguments
+\code{id} or \code{where}).}
 
 \item{default}{\code{\link{ANY}}.
 Value to be returned if option does not exist.
@@ -28,14 +31,19 @@ to return value \code{NULL}.}
 \item{...}{Further arguments to be passed to subsequent functions/methods.}
 }
 \description{
-Retrieves registry value from the respective environment for registry
-information.
+Retrieves registry value from the respective environment for registry information
+inside an option container (see \code{\link[optionr]{initializeOptionContainer}}).
 }
-\details{
+\section{Path-like identifiers}{
+
+
 Values for \code{id} are expected to be of structure \code{a/b/c/.../z},
-i.e. being a path-like identifier with a slash used as separator.
+i.e. path-like identifiers using a slash as separator.
 The identifier is transformed to \code{a$b$c$...$z} and then in turn to a
-valid \emph{get} expression (\code{getRegistryValueContainer(...)$a$b$c$...$z}).
+valid \emph{get} or \code{assign} expression
+(i.e. something similar to \code{getOptionContainer(...)$a$b$c$...$z} and
+\code{getOptionContainer(...)$a$b$c$...$z <- value}).
+Of course, "atomic" paths (e.g. only \code{a}) are also valid.
 }
 \examples{
 \dontrun{
@@ -45,14 +53,16 @@ valid \emph{get} expression (\code{getRegistryValueContainer(...)$a$b$c$...$z}).
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-  	\link[optionr]{getRegistryValue-character-method}
+  	\link[optionr]{getRegistryValue-char-char-method},
+   \link[optionr]{setRegistryValue},
+   \link[optionr]{rmRegistryValue}
 }
 }
 

@@ -2,7 +2,7 @@
 \docType{methods}
 \name{initializeOptionContainer,missing-method}
 \alias{initializeOptionContainer,missing-method}
-\alias{initializeOptionContainer-missing-method}
+\alias{initializeOptionContainer-miss-method}
 \title{Initialize Option Container (miss)}
 \usage{
 
@@ -35,7 +35,7 @@ options and thus is used by default.}
 }
 \value{
 See method
-   \code{\link[optionr]{initializeOptionContainer-NULL-method}}.
+   \code{\link[optionr]{initializeOptionContainer-char-method}}.
 }
 \description{
 See generic: \code{\link[optionr]{initializeOptionContainer}}
@@ -116,7 +116,7 @@ id
 
 options("test" = NULL)
 initializeOptionContainer(id)
-## --> calls `initializeOptions()`, `initializeMeta()` and `initializeRegistry()`
+## --> calls `initializeProjectOptions()`, `initializeMeta()` and `initializeRegistry()`
 ## and for each of which methods for signature `id` can be defined
 
 getOption(id$id)$options  
@@ -127,15 +127,16 @@ options("test" = NULL)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-   \link[optionr]{initializeOptionContainer-NULL-method},
-    \link[optionr]{getRegistry}
+   \link[optionr]{initializeOptionContainer-char-method},
+   \link[optionr]{ensureOptionContainer},
+   \link[optionr]{getOptionContainer}
 }
 }
 

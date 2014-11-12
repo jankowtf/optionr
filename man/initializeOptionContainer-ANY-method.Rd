@@ -115,7 +115,7 @@ id
 
 options("test" = NULL)
 initializeOptionContainer(id)
-## --> calls `initializeOptions()`, `initializeMeta()` and `initializeRegistry()`
+## --> calls `initializeProjectOptions()`, `initializeMeta()` and `initializeRegistry()`
 ## and for each of which methods for signature `id` can be defined
 
 getOption(id$id)$options  
@@ -126,15 +126,14 @@ options("test" = NULL)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-   \link[optionr]{initializeOptionContainer},
-    \link[optionr]{getRegistry}
+   \link[optionr]{initializeOptionContainer}
 }
 }
 

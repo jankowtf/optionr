@@ -3,7 +3,7 @@
 \name{getProjectOption,character,character-method}
 \alias{getProjectOption,character,character-method}
 \alias{getProjectOption-char-miss-method}
-\title{Get Option (char-char)}
+\title{Get Project Option (char-char)}
 \usage{
 \S4method{getProjectOption}{character,character}(id,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
@@ -42,10 +42,10 @@ See generic: \code{\link[optionr]{getProjectOption}}
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{

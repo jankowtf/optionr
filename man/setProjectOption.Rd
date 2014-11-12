@@ -19,7 +19,10 @@ Object containing value information.}
 \item{where}{\strong{Signature argument}.
 Object containing information about the location of the option container
 that is to be used. Typically, this either corresponds to the name/ID
-of a package/package project or an instance of a custom class.}
+of a package/package project or an instance of a custom class for which
+suitable methods in the context of managing options are defined
+(see other methods of this package that have signature arguments
+\code{id} or \code{where}).}
 
 \item{must_exist}{\code{\link{logical}}.
 \code{TRUE}: \code{id} pointing to a non-existing option either triggers
@@ -53,30 +56,29 @@ to return value \code{NULL}.}
 
 \item{reactive}{\code{\link{logical}}.
 \code{TRUE}: set reactive option via
-\code{\link[reactr]{setReactive}} or \code{\link[reactr]{setShinyReactive}}.
+\code{\link[optionr]{setReactive}} or \code{\link[optionr]{setShinyReactive}}.
 \code{FALSE}: set regular/non-reactive option.
 Note that if \code{value = reactiveOption()}, \code{reactive} is automatically
 set to \code{TRUE}.}
 
 \item{Further}{arguments to be passed along to subsequent functions.
 In particular:
-\code{\link[reactr]{setShinyReactive}}.}
+\code{\link[optionr]{setShinyReactive}}.}
 }
 \description{
 Sets generic option inside an option container created via
 \code{\link[optionr]{initializeOptionContainer}} or any of its subcontainers.
 }
-\details{
+\section{Path-like identifiers}{
+
+
 Values for \code{id} are expected to be of structure \code{a/b/c/.../z},
-i.e. being a path-like identifier with a slash used as separator.
+i.e. path-like identifiers using a slash as separator.
 The identifier is transformed to \code{a$b$c$...$z} and then in turn to a
-valid \code{assign} expression:
-\code{assign("z", value = value, envir = getOptionContainer(...)$a$b$c$...)}.
-}
-\note{
-Note that if \code{id = "a/b/d"}, the function expects that there exists an
-environment at \code{getOption(...)$a$b} (checked via
-\code{getFreeOption(id = "a/b")}).
+valid \emph{get} or \code{assign} expression
+(i.e. something similar to \code{getOptionContainer(...)$a$b$c$...$z} and
+\code{getOptionContainer(...)$a$b$c$...$z <- value}).
+Of course, "atomic" paths (e.g. only \code{a}) are also valid.
 }
 \examples{
 \dontrun{
@@ -86,14 +88,16 @@ environment at \code{getOption(...)$a$b} (checked via
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-  	\link[optionr]{setProjectOption-character-method}
+  	\link[optionr]{setProjectOption-char-any-char-method},
+    \link[optionr]{getProjectOption},
+    \link[optionr]{rmProjectOption}
 }
 }
 

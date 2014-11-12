@@ -11,7 +11,7 @@
 #'    In the simplest case, this corresponds
 #'    to the name/ID of a package/package project. But it can also be an 
 #'    instance of a class for which methods for 
-#'    \code{\link[optionr]{initializeOptions}}, 
+#'    \code{\link[optionr]{initializeProjectOptions}}, 
 #'    \code{\link[optionr]{initializeMeta}} and 
 #'    \code{\link[optionr]{initializeRegistry}} exist.
 #' @param check \code{\link{logical}}.
@@ -31,8 +31,9 @@
 #' @template threedots
 #' @example inst/examples/initializeOptionContainer.r
 #' @seealso \code{
-#'   	\link[optionr]{initializeOptionContainer-NULL-method},
-#'     \link[optionr]{getRegistry}
+#'   	\link[optionr]{initializeOptionContainer-char-method},
+#'     \link[optionr]{ensureOptionContainer},
+#'     \link[optionr]{getOptionContainer}
 #' }
 #' @template author
 #' @template references
@@ -64,16 +65,17 @@ setGeneric(
 #' @inheritParams initializeOptionContainer
 #' @param id \code{\link{missing}}.
 #' @return See method
-#'    \code{\link[optionr]{initializeOptionContainer-NULL-method}}.
+#'    \code{\link[optionr]{initializeOptionContainer-char-method}}.
 #' @example inst/examples/initializeOptionContainer.r
 #' @seealso \code{
-#'    \link[optionr]{initializeOptionContainer-NULL-method},
-#'     \link[optionr]{getRegistry}
+#'    \link[optionr]{initializeOptionContainer-char-method},
+#'    \link[optionr]{ensureOptionContainer},
+#'    \link[optionr]{getOptionContainer}
 #' }
 #' @template author
 #' @template references
+#' @aliases initializeOptionContainer-miss-method
 #' @export
-#' @aliases initializeOptionContainer-missing-method
 setMethod(
   f = "initializeOptionContainer", 
   signature = signature(
@@ -111,8 +113,7 @@ setMethod(
 #' @return \code{\link{environment}}. The option container.
 #' @example inst/examples/initializeOptionContainer.r
 #' @seealso \code{
-#'    \link[optionr]{initializeOptionContainer},
-#'     \link[optionr]{getRegistry}
+#'    \link[optionr]{initializeOptionContainer}
 #' }
 #' @template author
 #' @template references
@@ -156,7 +157,7 @@ setMethod(
   out <- if (is.null(getOption(id_char))) {
     opts <- ensureOptionContainer(id = id, check = check, hidden = hidden)
     if ("options" %in% components) {
-      initializeOptions(id = id, where = opts)
+      initializeProjectOptions(id = id, where = opts)
     }
     if (".meta" %in% components) {
       initializeMeta(id = id, where = opts)
@@ -172,7 +173,7 @@ setMethod(
       opts <- getOption(id_char)  
       rm(list = ls(opts, all.names = TRUE), envir = opts)
       if ("options" %in% components) {
-        initializeOptions(id = id, where = opts)
+        initializeProjectOptions(id = id, where = opts)
       }
       if (".meta" %in% components) {
         initializeMeta(id = id, where = opts)
@@ -201,13 +202,12 @@ setMethod(
 #' @return \code{\link{environment}}. The option container.
 #' @example inst/examples/initializeOptionContainer.r
 #' @seealso \code{
-#'    \link[optionr]{initializeOptionContainer},
-#'     \link[optionr]{getRegistry}
+#'    \link[optionr]{initializeOptionContainer}
 #' }
 #' @template author
 #' @template references
+#' @aliases initializeOptionContainer-char-method
 #' @export
-#' @aliases initializeOptionContainer-character-method
 setMethod(
   f = "initializeOptionContainer", 
   signature = signature(
@@ -233,7 +233,7 @@ setMethod(
   out <- if (is.null(getOption(id))) {
     opts <- ensureOptionContainer(id = id_0, check = check, hidden = hidden)
     if ("options" %in% components) {
-      initializeOptions(where = opts)
+      initializeProjectOptions(where = opts)
     }
     if (".meta" %in% components) {
       initializeMeta(where = opts)
@@ -249,7 +249,7 @@ setMethod(
       opts <- getOption(id)  
       rm(list = ls(opts, all.names = TRUE), envir = opts)
       if ("options" %in% components) {
-        initializeOptions(where = opts)
+        initializeProjectOptions(where = opts)
       }
       if (".meta" %in% components) {
         initializeMeta(where = opts)
