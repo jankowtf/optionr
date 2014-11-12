@@ -2,7 +2,7 @@
 \docType{methods}
 \name{initializeMeta,missing,missing-method}
 \alias{initializeMeta,missing,missing-method}
-\alias{initializeMeta-missing-missing-method}
+\alias{initializeMeta-miss-miss-method}
 \title{Initialize Meta Information (miss-miss)}
 \usage{
 \S4method{initializeMeta}{missing,missing}(id = ".meta", where, ...)
@@ -16,10 +16,10 @@
 }
 \value{
 See method
-   \code{\link[reactr]{initializeMeta-NULL-method}}.
+   \code{\link[optionr]{initializeMeta-char-env-method}}.
 }
 \description{
-See generic: \code{\link[reactr]{initializeMeta}}
+See generic: \code{\link[optionr]{initializeMeta}}
 }
 \examples{
 \dontrun{
@@ -37,15 +37,17 @@ exists("META", container)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-   \link[reactr]{initializeMeta-NULL-method},
-    \link[reactr]{getRegistry}
+   \link[optionr]{initializeMeta-char-env-method},
+   \link[optionr]{setMetaValue},
+   \link[optionr]{getMetaValue},
+   \link[optionr]{rmMetaValue}
 }
 }
 

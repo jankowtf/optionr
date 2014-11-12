@@ -3,7 +3,7 @@
 #'
 #' @description 
 #' Creates a reactive option expression. This is a convenience/encapsulation
-#' wrapper around \code{\link[reactr]{reactiveOption}}.
+#' wrapper around \code{\link[reactr]{reactiveExpression}}.
 #'  
 #' @param expr \code{\link{expression}} (quoted or unquoted).
 #' @param where  \code{\link{environment}}.

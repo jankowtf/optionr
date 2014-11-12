@@ -57,14 +57,16 @@ options("test" = NULL)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-  	\link[rapp]{getOptionContainer-missing-method}
+  	\link[optionr]{getOptionContainer-char-method},
+    \link[optionr]{ensureOptionContainer},
+    \link[optionr]{initializeOptionContainer}
 }
 }
 

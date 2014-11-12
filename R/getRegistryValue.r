@@ -2,21 +2,20 @@
 #' Get Registry Value (generic)
 #'
 #' @description 
-#' Retrieves registry value from the respective environment for registry 
-#' information.
+#' Retrieves registry value from the respective environment for registry information
+#' inside an option container (see \code{\link[optionr]{initializeOptionContainer}}).
 #' 
-#' @details
-#' Values for \code{id} are expected to be of structure \code{a/b/c/.../z},
-#' i.e. being a path-like identifier with a slash used as separator. 
-#' The identifier is transformed to \code{a$b$c$...$z} and then in turn to a
-#' valid \emph{get} expression (\code{getRegistryValueContainer(...)$a$b$c$...$z}).
+#' @template path-like-ids
 #'   	
 #' @param id \strong{Signature argument}.
 #'    Object containing path-like name/ID information.
 #' @param where \strong{Signature argument}.
 #'    Object containing information about the location of the option container
 #'    that is to be used. Typically, this either corresponds to the name/ID
-#'    of a package/package project or an instance of a custom class.  
+#'    of a package/package project or an instance of a custom class for which
+#'    suitable methods in the context of managing options are defined 
+#'    (see other methods of this package that have signature arguments 
+#'    \code{id} or \code{where}).  
 #' @param default \code{\link{ANY}}. 
 #'    Value to be returned if option does not exist. 
 #'    See \code{\link[base]{getRegistryValue}}.
@@ -27,7 +26,9 @@
 #' @template threedots
 #' @example inst/examples/getRegistryValue.r
 #' @seealso \code{
-#'   	\link[optionr]{getRegistryValue-character-method}
+#'   	\link[optionr]{getRegistryValue-char-char-method},
+#'    \link[optionr]{setRegistryValue},
+#'    \link[optionr]{rmRegistryValue}
 #' }
 #' @template author
 #' @template references
@@ -53,7 +54,7 @@ setGeneric(
 )
 
 #' @title
-#' Get Option (char-miss)
+#' Get Registry Value (char-miss)
 #'
 #' @description 
 #' See generic: \code{\link[optionr]{getRegistryValue}}
@@ -97,7 +98,7 @@ setMethod(
 )
 
 #' @title
-#' Get Option (char-any)
+#' Get Registry Value (char-any)
 #'
 #' @description 
 #' See generic: \code{\link[optionr]{getRegistryValue}}
@@ -130,7 +131,7 @@ setMethod(
     ...
   ) {
  
-  getFreeOption(
+  getAnywhereOption(
     id = file.path(".registry", id),
     where = where$id,
     default = default,
@@ -142,7 +143,7 @@ setMethod(
 )
 
 #' @title
-#' Get Option (char-char)
+#' Get Registry Value (char-char)
 #'
 #' @description 
 #' See generic: \code{\link[optionr]{getRegistryValue}}
@@ -175,7 +176,7 @@ setMethod(
     ...
   ) {
 
-  getFreeOption(
+  getAnywhereOption(
     id = file.path(".registry", id),
     where = where,
     default = default,

@@ -18,7 +18,9 @@
 #' @template threedots
 #' @example inst/examples/getOptionContainer.r
 #' @seealso \code{
-#'   	\link[rapp]{getOptionContainer-missing-method}
+#'   	\link[optionr]{getOptionContainer-char-method},
+#'     \link[optionr]{ensureOptionContainer},
+#'     \link[optionr]{initializeOptionContainer}
 #' }
 #' @template author
 #' @template references
@@ -41,20 +43,21 @@ setGeneric(
 )
 
 #' @title
-#' Ensure Option Container (miss-miss)
+#' Get Option Container (miss)
 #'
 #' @description 
-#' See generic: \code{\link[rapp]{getOptionContainer}}
+#' See generic: \code{\link[optionr]{getOptionContainer}}
 #'   	 
 #' @inheritParams getOptionContainer
 #' @param id \code{\link{missing}}.
 #' @return \code{\link{logical}}. \code{TRUE}.
 #' @example inst/examples/getOptionContainer.r
 #' @seealso \code{
-#'    \link[rapp]{getOptionContainer}
+#'    \link[optionr]{getOptionContainer}
 #' }
 #' @template author
 #' @template references
+#' @aliases getOptionContainer-miss-method
 #' @export
 setMethod(
   f = "getOptionContainer", 
@@ -77,56 +80,21 @@ setMethod(
 )
 
 #' @title
-#' Ensure Option Container (any-miss)
+#' Get Option Container (any)
 #'
 #' @description 
-#' See generic: \code{\link[rapp]{getOptionContainer}}
+#' See generic: \code{\link[optionr]{getOptionContainer}}
 #'      
 #' @inheritParams getOptionContainer
 #' @param id \code{\link{ANY}}.
 #' @return \code{\link{logical}}. \code{TRUE}.
 #' @example inst/examples/getOptionContainer.r
 #' @seealso \code{
-#'    \link[rapp]{getOptionContainer}
+#'    \link[optionr]{getOptionContainer}
 #' }
 #' @template author
 #' @template references
-#' @export
-setMethod(
-  f = "getOptionContainer", 
-  signature = signature(
-    id = "ANY"
-  ), 
-  definition = function(
-    id,
-    hidden,
-    ...
-  ) {
-    
-  getOptionContainer(
-    id = id,
-    hidden = hidden,
-    ...
-  )
-  
-  }
-)
-
-#' @title
-#' Ensure Option Container (any-env)
-#'
-#' @description 
-#' See generic: \code{\link[rapp]{getOptionContainer}}
-#'      
-#' @inheritParams getOptionContainer
-#' @param id \code{\link{ANY}}.
-#' @return \code{\link{logical}}. \code{TRUE}.
-#' @example inst/examples/getOptionContainer.r
-#' @seealso \code{
-#'    \link[rapp]{getOptionContainer}
-#' }
-#' @template author
-#' @template references
+#' @aliases getOptionContainer-any-method
 #' @import conditionr
 #' @export
 setMethod(
@@ -160,20 +128,21 @@ setMethod(
 )
 
 #' @title
-#' Ensure Option Container (char-env)
+#' Get Option Container (char)
 #'
 #' @description 
-#' See generic: \code{\link[rapp]{getOptionContainer}}
+#' See generic: \code{\link[optionr]{getOptionContainer}}
 #'      
 #' @inheritParams getOptionContainer
 #' @param id \code{\link{character}}.
 #' @return \code{\link{logical}}. \code{TRUE}.
 #' @example inst/examples/getOptionContainer.r
 #' @seealso \code{
-#'    \link[rapp]{getOptionContainer}
+#'    \link[optionr]{getOptionContainer}
 #' }
 #' @template author
 #' @template references
+#' @aliases getOptionContainer-char-method
 #' @import conditionr
 #' @export
 setMethod(

@@ -3,7 +3,7 @@
 \name{getMetaValue,character,missing-method}
 \alias{getMetaValue,character,missing-method}
 \alias{getMetaValue-char-miss-method}
-\title{Get Option (char-miss)}
+\title{Get Meta Value (char-miss)}
 \usage{
 \S4method{getMetaValue}{character,missing}(id,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
@@ -41,10 +41,10 @@ See generic: \code{\link[optionr]{getMetaValue}}
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{

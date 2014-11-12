@@ -2,7 +2,7 @@
 \docType{methods}
 \name{initializeRegistry,missing,environment-method}
 \alias{initializeRegistry,missing,environment-method}
-\alias{initializeRegistry-missing-environment-method}
+\alias{initializeRegistry-miss-env-method}
 \title{Initialize Registry (miss-envir)}
 \usage{
 \S4method{initializeRegistry}{missing,environment}(id = ".registry", where,
@@ -17,10 +17,10 @@
 }
 \value{
 See method
-   \code{\link[reactr]{initializeRegistry-NULL-method}}.
+   \code{\link[optionr]{initializeRegistry-char-env-method}}.
 }
 \description{
-See generic: \code{\link[reactr]{initializeRegistry}}
+See generic: \code{\link[optionr]{initializeRegistry}}
 }
 \examples{
 \dontrun{
@@ -38,15 +38,14 @@ exists("REGISTRY", container)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-   \link[reactr]{initializeRegistry-NULL-method},
-    \link[reactr]{getRegistry}
+   \link[optionr]{initializeRegistry}
 }
 }
 

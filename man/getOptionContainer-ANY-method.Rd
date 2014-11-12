@@ -2,13 +2,9 @@
 \docType{methods}
 \name{getOptionContainer,ANY-method}
 \alias{getOptionContainer,ANY-method}
-\title{Ensure Option Container (any-miss)}
+\alias{getOptionContainer-any-method}
+\title{Get Option Container (any)}
 \usage{
-
-  \S4method{getOptionContainer}{ANY}(id = tryCatch(devtools::as.package(".")$package,
-  error = function(cond) {     stop("Invalid default value for `id`") }),
-  hidden = TRUE, ...)
-
 
   \S4method{getOptionContainer}{ANY}(id = tryCatch(devtools::as.package(".")$package,
   error = function(cond) {     stop("Invalid default value for `id`") }),
@@ -23,18 +19,12 @@ is preprended with a dot as the container was assigned with \code{hidden = TRUE}
 \code{FALSE}: use name/ID information in \code{id} as is.}
 
 \item{...}{Further arguments to be passed to subsequent functions/methods.}
-
-\item{id}{\code{\link{ANY}}.}
 }
 \value{
 \code{\link{logical}}. \code{TRUE}.
-
-\code{\link{logical}}. \code{TRUE}.
 }
 \description{
-See generic: \code{\link[rapp]{getOptionContainer}}
-
-See generic: \code{\link[rapp]{getOptionContainer}}
+See generic: \code{\link[optionr]{getOptionContainer}}
 }
 \examples{
 \dontrun{
@@ -65,52 +55,16 @@ identical(getOptionContainer(id, hidden = FALSE), res)
 options("test" = NULL)
   
 }
-\dontrun{
-
-##------------------------------------------------------------------------------
-## Default `id` //
-##------------------------------------------------------------------------------
-
-res <- ensureOptionContainer(overwrite = TRUE)
-identical(getOptionContainer(), res)
-options(".optionr" = NULL)
-  
-##------------------------------------------------------------------------------
-## Hidden //
-##------------------------------------------------------------------------------
-
-res <- ensureOptionContainer(hidden = FALSE, overwrite = TRUE)
-identical(getOptionContainer(hidden = FALSE), res)
-options("optionr" = NULL)
-  
-##------------------------------------------------------------------------------
-## As interface //
-##------------------------------------------------------------------------------
-  
-id <- structure(list(id = "test"), class = "OptionContext.Test")
-res <- ensureOptionContainer(id, hidden = FALSE, overwrite = TRUE)
-identical(getOptionContainer(id, hidden = FALSE), res)
-options("test" = NULL)
-  
-}
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
-
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
-
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-   \link[rapp]{getOptionContainer}
-}
-
-\code{
-   \link[rapp]{getOptionContainer}
+   \link[optionr]{getOptionContainer}
 }
 }
 

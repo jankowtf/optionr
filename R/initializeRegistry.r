@@ -12,8 +12,10 @@
 #' @template threedots
 #' @example inst/examples/initializeRegistry.r
 #' @seealso \code{
-#'   	\link[reactr]{initializeRegistry-NULL-method},
-#'     \link[reactr]{getRegistry}
+#'   	\link[optionr]{initializeRegistry-char-env-method},
+#'    \link[optionr]{setRegistryValue},
+#'    \link[optionr]{getRegistryValue},
+#'    \link[optionr]{rmRegistryValue}
 #' }
 #' @template author
 #' @template references
@@ -36,22 +38,21 @@ setGeneric(
 #' Initialize Registry (miss-miss)
 #'
 #' @description 
-#' See generic: \code{\link[reactr]{initializeRegistry}}
+#' See generic: \code{\link[optionr]{initializeRegistry}}
 #'      
 #' @inheritParams initializeRegistry
 #' @param id \code{\link{missing}}.
 #' @param where \code{\link{missing}}.
 #' @return See method
-#'    \code{\link[reactr]{initializeRegistry-NULL-method}}.
+#'    \code{\link[optionr]{initializeRegistry-char-env-method}}.
 #' @example inst/examples/initializeRegistry.r
 #' @seealso \code{
-#'    \link[reactr]{initializeRegistry-NULL-method},
-#'     \link[reactr]{getRegistry}
+#'    \link[optionr]{initializeRegistry}
 #' }
 #' @template author
 #' @template references
+#' @aliases initializeRegistry-miss-miss-method
 #' @export
-#' @aliases initializeRegistry-missing-missing-method
 setMethod(
   f = "initializeRegistry", 
   signature = signature(
@@ -77,22 +78,21 @@ setMethod(
 #' Initialize Registry (miss-envir)
 #'
 #' @description 
-#' See generic: \code{\link[reactr]{initializeRegistry}}
+#' See generic: \code{\link[optionr]{initializeRegistry}}
 #'      
 #' @inheritParams initializeRegistry
 #' @param id \code{\link{missing}}.
 #' @param where \code{\link{environment}}.
 #' @return See method
-#'    \code{\link[reactr]{initializeRegistry-NULL-method}}.
+#'    \code{\link[optionr]{initializeRegistry-char-env-method}}.
 #' @example inst/examples/initializeRegistry.r
 #' @seealso \code{
-#'    \link[reactr]{initializeRegistry-NULL-method},
-#'     \link[reactr]{getRegistry}
+#'    \link[optionr]{initializeRegistry}
 #' }
 #' @template author
 #' @template references
+#' @aliases initializeRegistry-miss-env-method
 #' @export
-#' @aliases initializeRegistry-missing-environment-method
 setMethod(
   f = "initializeRegistry", 
   signature = signature(
@@ -118,7 +118,7 @@ setMethod(
 #' Initialize Registry (any-envir)
 #'
 #' @description 
-#' See generic: \code{\link[reactr]{initializeRegistry}}
+#' See generic: \code{\link[optionr]{initializeRegistry}}
 #'      
 #' @inheritParams initializeRegistry
 #' @param id \code{\link{ANY}}.
@@ -126,12 +126,11 @@ setMethod(
 #' @return \code{\link{environment}}. Initialized registry.
 #' @example inst/examples/initializeRegistry.r
 #' @seealso \code{
-#'    \link[reactr]{initializeRegistry},
-#'     \link[reactr]{getRegistry}
+#'    \link[optionr]{initializeRegistry}
 #' }
 #' @template author
 #' @template references
-#' @aliases initializeRegistry-any-environment-method
+#' @aliases initializeRegistry-any-env-method
 #' @export
 setMethod(
   f = "initializeRegistry", 
@@ -154,7 +153,7 @@ setMethod(
 #' Initialize Registry (char-envir)
 #'
 #' @description 
-#' See generic: \code{\link[reactr]{initializeRegistry}}
+#' See generic: \code{\link[optionr]{initializeRegistry}}
 #'      
 #' @inheritParams initializeRegistry
 #' @param id \code{\link{character}}.
@@ -162,13 +161,13 @@ setMethod(
 #' @return \code{\link{environment}}. Initialized registry.
 #' @example inst/examples/initializeRegistry.r
 #' @seealso \code{
-#'    \link[reactr]{initializeRegistry},
-#'     \link[reactr]{getRegistry}
+#'    \link[optionr]{initializeRegistry},
+#'     \link[optionr]{getRegistry}
 #' }
 #' @template author
 #' @template references
+#' @aliases initializeRegistry-char-env-method
 #' @export
-#' @aliases initializeRegistry-character-environment-method
 setMethod(
   f = "initializeRegistry", 
   signature = signature(

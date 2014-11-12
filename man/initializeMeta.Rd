@@ -34,15 +34,17 @@ exists("META", container)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-  	\link[reactr]{initializeMeta-NULL-method},
-    \link[reactr]{getRegistry}
+  	\link[optionr]{initializeMeta-char-char-method},
+   \link[optionr]{setMetaValue},
+   \link[optionr]{getMetaValue},
+   \link[optionr]{rmtMetaValue}
 }
 }
 

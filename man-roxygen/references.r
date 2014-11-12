@@ -1,1 +1,1 @@
-#' @references \url{http://github.com/whotocomplainto/test.package}
+#' @references \url{http://github.com/Rappster/optionr}

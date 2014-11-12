@@ -15,7 +15,7 @@ process.
 In the simplest case, this corresponds
 to the name/ID of a package/package project. But it can also be an
 instance of a class for which methods for
-\code{\link[optionr]{initializeOptions}},
+\code{\link[optionr]{initializeProjectOptions}},
 \code{\link[optionr]{initializeMeta}} and
 \code{\link[optionr]{initializeRegistry}} exist.}
 
@@ -118,7 +118,7 @@ id
 
 options("test" = NULL)
 initializeOptionContainer(id)
-## --> calls `initializeOptions()`, `initializeMeta()` and `initializeRegistry()`
+## --> calls `initializeProjectOptions()`, `initializeMeta()` and `initializeRegistry()`
 ## and for each of which methods for signature `id` can be defined
 
 getOption(id$id)$options  
@@ -129,15 +129,16 @@ options("test" = NULL)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-  	\link[optionr]{initializeOptionContainer-NULL-method},
-    \link[optionr]{getRegistry}
+  	\link[optionr]{initializeOptionContainer-char-method},
+    \link[optionr]{ensureOptionContainer},
+    \link[optionr]{getOptionContainer}
 }
 }
 

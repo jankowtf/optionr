@@ -2,6 +2,7 @@
 \docType{methods}
 \name{ensureOptionContainer,ANY,missing-method}
 \alias{ensureOptionContainer,ANY,missing-method}
+\alias{ensureOptionContainer-any-miss-method}
 \title{Ensure Option Container (any-miss)}
 \usage{
 
@@ -35,10 +36,11 @@ options and thus is used by default.}
 \item{...}{Further arguments to be passed to subsequent functions/methods.}
 }
 \value{
-\code{\link{logical}}. \code{TRUE}.
+See method
+   \code{\link[optionr]{ensureOptionContainer-char-env-method}}.
 }
 \description{
-See generic: \code{\link[rapp]{ensureOptionContainer}}
+See generic: \code{\link[optionr]{ensureOptionContainer}}
 }
 \examples{
 \dontrun{
@@ -98,14 +100,14 @@ options("test" = NULL)
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
-   \link[rapp]{ensureOptionContainer}
+   \link[optionr]{ensureOptionContainer}
 }
 }
 

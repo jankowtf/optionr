@@ -31,7 +31,8 @@
 #' @template threedots
 #' @example inst/examples/ensureOptionContainer.r
 #' @seealso \code{
-#'   	\link[rapp]{ensureOptionContainer-missing-method}
+#'   	\link[optionr]{ensureOptionContainer-char-env-method},
+#'     \link[optionr]{initializeOptionContainer}
 #' }
 #' @template author
 #' @template references
@@ -60,18 +61,20 @@ setGeneric(
 #' Ensure Option Container (miss-miss)
 #'
 #' @description 
-#' See generic: \code{\link[rapp]{ensureOptionContainer}}
+#' See generic: \code{\link[optionr]{ensureOptionContainer}}
 #'   	 
 #' @inheritParams ensureOptionContainer
 #' @param id \code{\link{missing}}.
 #' @param container \code{\link{missing}}.
-#' @return \code{\link{logical}}. \code{TRUE}.
+#' @return See method
+#'    \code{\link[optionr]{ensureOptionContainer-char-env-method}}.
 #' @example inst/examples/ensureOptionContainer.r
 #' @seealso \code{
-#'    \link[rapp]{ensureOptionContainer}
+#'    \link[optionr]{ensureOptionContainer}
 #' }
 #' @template author
 #' @template references
+#' @aliases ensureOptionContainer-miss-miss-method
 #' @export
 setMethod(
   f = "ensureOptionContainer", 
@@ -104,18 +107,20 @@ setMethod(
 #' Ensure Option Container (any-miss)
 #'
 #' @description 
-#' See generic: \code{\link[rapp]{ensureOptionContainer}}
+#' See generic: \code{\link[optionr]{ensureOptionContainer}}
 #'      
 #' @inheritParams ensureOptionContainer
 #' @param id \code{\link{ANY}}.
 #' @param container \code{\link{missing}}.
-#' @return \code{\link{logical}}. \code{TRUE}.
+#' @return See method
+#'    \code{\link[optionr]{ensureOptionContainer-char-env-method}}.
 #' @example inst/examples/ensureOptionContainer.r
 #' @seealso \code{
-#'    \link[rapp]{ensureOptionContainer}
+#'    \link[optionr]{ensureOptionContainer}
 #' }
 #' @template author
 #' @template references
+#' @aliases ensureOptionContainer-any-miss-method
 #' @export
 setMethod(
   f = "ensureOptionContainer", 
@@ -148,7 +153,7 @@ setMethod(
 #' Ensure Option Container (any-env)
 #'
 #' @description 
-#' See generic: \code{\link[rapp]{ensureOptionContainer}}
+#' See generic: \code{\link[optionr]{ensureOptionContainer}}
 #'      
 #' @inheritParams ensureOptionContainer
 #' @param id \code{\link{ANY}}.
@@ -156,11 +161,12 @@ setMethod(
 #' @return \code{\link{logical}}. \code{TRUE}.
 #' @example inst/examples/ensureOptionContainer.r
 #' @seealso \code{
-#'    \link[rapp]{ensureOptionContainer}
+#'    \link[optionr]{ensureOptionContainer}
 #' }
 #' @template author
 #' @template references
 #' @import conditionr
+#' @aliases ensureOptionContainer-any-env-method
 #' @export
 setMethod(
   f = "ensureOptionContainer", 
@@ -221,7 +227,7 @@ setMethod(
 #' Ensure Option Container (char-env)
 #'
 #' @description 
-#' See generic: \code{\link[rapp]{ensureOptionContainer}}
+#' See generic: \code{\link[optionr]{ensureOptionContainer}}
 #'      
 #' @inheritParams ensureOptionContainer
 #' @param id \code{\link{character}}.
@@ -229,11 +235,12 @@ setMethod(
 #' @return \code{\link{logical}}. \code{TRUE}.
 #' @example inst/examples/ensureOptionContainer.r
 #' @seealso \code{
-#'    \link[rapp]{ensureOptionContainer}
+#'    \link[optionr]{ensureOptionContainer}
 #' }
 #' @template author
 #' @template references
 #' @import conditionr
+#' @aliases ensureOptionContainer-char-env-method
 #' @export
 setMethod(
   f = "ensureOptionContainer", 

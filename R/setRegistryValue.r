@@ -4,17 +4,7 @@
 #' @description 
 #' Sets registry value inside the respective environment for registry information.
 #' 
-#' @details
-#' Values for \code{id} are expected to be of structure \code{a/b/c/.../z},
-#' i.e. being a path-like identifier with a slash used as separator. 
-#' The identifier is transformed to \code{a$b$c$...$z} and then in turn to a
-#' valid \code{assign} expression: 
-#' \code{assign("z", value = value, envir = getOptionContainer(...)$a$b$c$...)}.
-#' 
-#' @note
-#' Note that if \code{id = "a/b/d"}, the function expects that there exists an 
-#' environment at \code{getOption(...)$a$b} (checked via 
-#' \code{getFreeOption(id = "a/b")}).
+#' @template path-like-ids
 #'   	
 #' @param id \strong{Signature argument}.
 #'    Object containing path-like ID information.
@@ -23,7 +13,10 @@
 #' @param where \strong{Signature argument}.
 #'    Object containing information about the location of the option container
 #'    that is to be used. Typically, this either corresponds to the name/ID
-#'    of a package/package project or an instance of a custom class.    
+#'    of a package/package project or an instance of a custom class for which
+#'    suitable methods in the context of managing options are defined 
+#'    (see other methods of this package that have signature arguments 
+#'    \code{id} or \code{where}).  
 #' @param must_exist \code{\link{logical}}. 
 #'    \code{TRUE}: \code{id} pointing to a non-existing option either triggers
 #'    an error or results in return value \code{FALSE} (depending on \code{strict}); 
@@ -51,16 +44,18 @@
 #'    to return value \code{NULL}.
 #' @param reactive \code{\link{logical}}. 
 #'    \code{TRUE}: set reactive option via 
-#'    \code{\link[reactr]{setReactive}} or \code{\link[reactr]{setShinyReactive}}.
+#'    \code{\link[optionr]{setReactive}} or \code{\link[optionr]{setShinyReactive}}.
 #'    \code{FALSE}: set regular/non-reactive option.
 #'    Note that if \code{value = reactiveOption()}, \code{reactive} is automatically
 #'    set to \code{TRUE}.
 #' @param Further arguments to be passed along to subsequent functions.
 #'    In particular: 
-#'    \code{\link[reactr]{setShinyReactive}}.
+#'    \code{\link[optionr]{setShinyReactive}}.
 #' @example inst/examples/setRegistryValue.r
 #' @seealso \code{
-#'   	\link[optionr]{setRegistryValue-character-method}
+#'   	\link[optionr]{setRegistryValue-char-any-char-method},
+#'     \link[optionr]{getRegistryValue},
+#'     \link[optionr]{rmRegistryValue}
 #' }
 #' @template author
 #' @template references
@@ -188,7 +183,7 @@ setMethod(
     ...
   ) {
 
-  setFreeOption(
+  setAnywhereOption(
     id = file.path(".registry", id),
     value = value,
     where = where$id,
@@ -244,7 +239,7 @@ setMethod(
     ...
   ) {
     
-  setFreeOption(
+  setAnywhereOption(
     id = file.path(".registry", id),
     value = value,
     where = where,

@@ -50,7 +50,7 @@ to return value \code{NULL}.}
 
 \item{reactive}{\code{\link{logical}}.
 \code{TRUE}: set reactive option via
-\code{\link[reactr]{setReactive}} or \code{\link[reactr]{setShinyReactive}}.
+\code{\link[optionr]{setReactive}} or \code{\link[optionr]{setShinyReactive}}.
 \code{FALSE}: set regular/non-reactive option.
 Note that if \code{value = reactiveOption()}, \code{reactive} is automatically
 set to \code{TRUE}.}
@@ -70,10 +70,10 @@ See generic: \code{\link[optionr]{setRegistryValue}}
 }
 }
 \author{
-Who to complain to \email{yourfault@somewhere.net}
+Janko Thyson \email{janko.thyson@gmail.com}
 }
 \references{
-\url{http://github.com/whotocomplainto/test.package}
+\url{http://github.com/Rappster/optionr}
 }
 \seealso{
 \code{
