@@ -9,7 +9,7 @@ setProjectOption(id = "a", value = TRUE)
 rmProjectOption(id = "a")
 exists("a", container$options, inherits = FALSE)
 
-setProjectOption(id = "a/b/c", value = 10, gap = TRUE)
+setProjectOption(id = "a/b/c", value = 10)
 rmProjectOption(id = "a/b/c")
 exists("c", container$options$a$b, inherits = FALSE)
 
@@ -20,14 +20,14 @@ exists("c", container$options$a$b, inherits = FALSE)
 where <- "test"
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
 ".test" %in% names(options())
-setProjectOption(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setProjectOption(id = "a/b/c", value = 10, where = where)
 rmProjectOption(id = "a/b/c", where = where)
 exists("c", container$options$a$b, inherits = FALSE)
   
 where <- structure(list(id = "test"), class = "OptionContext.Test")
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
 ".test" %in% names(options())
-setProjectOption(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setProjectOption(id = "a/b/c", value = 10, where = where)
 rmProjectOption(id = "a/b/c", where = where)
 exists("c", container$options$a$b, inherits = FALSE)
 
@@ -37,13 +37,13 @@ exists("c", container$options$a$b, inherits = FALSE)
   
 container <- initializeOptionContainer(overwrite = TRUE)
 rmProjectOption(id = "a")
-try(rmProjectOption(id = "a", strict = TRUE))
+try(rmProjectOption(id = "a", strict = 2))
 
 rmProjectOption(id = "a/b/c")
-try(rmProjectOption(id = "a/b/c", strict = TRUE))
+try(rmProjectOption(id = "a/b/c", strict = 2))
 
 rmProjectOption(id = character())
-try(rmProjectOption(id = character(), strict = TRUE))
+try(rmProjectOption(id = character(), strict = 2))
     
 }
 

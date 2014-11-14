@@ -7,7 +7,7 @@
 \usage{
 \S4method{rmRegistryValue}{character,missing}(id,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
-      stop("Invalid default value for `where`") }), strict = FALSE, ...)
+      stop("Invalid default value for `where`") }), strict = c(0, 1, 2), ...)
 }
 \arguments{
 \item{id}{\code{\link{character}}.}
@@ -15,13 +15,14 @@
 \item{where}{\code{\link{missing}}.}
 
 \item{strict}{\code{\link{logical}}.
-\code{TRUE}: the following constellations trigger an error:
+ Controls what happens when \code{id} points to a non-existing registry object:
 \itemize{
-    \item{\code{id} pointing to a non-existing option}
-    \item{empty \code{id}}
-}
-\code{FALSE}: the stated constellations lead to the return value
-being \code{FALSE}.}
+   \item{0: }{ignore and return \code{FALSE} to signal that the
+             assignment process was not successful or \code{fail_value} depending
+             on the value of \code{return_status}}
+         \item{1: }{ignore and with warning and return \code{FALSE}}
+         \item{2: }{ignore and with error}
+   }}
 
 \item{...}{Further arguments to be passed to subsequent functions/methods.}
 }
@@ -44,7 +45,7 @@ setRegistryValue(id = "a", value = TRUE)
 rmRegistryValue(id = "a")
 exists("a", container$.registry, inherits = FALSE)
 
-setRegistryValue(id = "a/b/c", value = 10, gap = TRUE)
+setRegistryValue(id = "a/b/c", value = 10)
 rmRegistryValue(id = "a/b/c")
 exists("c", container$.registry$a$b, inherits = FALSE)
 
@@ -55,14 +56,14 @@ exists("c", container$.registry$a$b, inherits = FALSE)
 where <- "test"
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
 ".test" \%in\% names(options())
-setRegistryValue(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setRegistryValue(id = "a/b/c", value = 10, where = where)
 rmRegistryValue(id = "a/b/c", where = where)
 exists("c", container$.registry$a$b, inherits = FALSE)
   
 where <- structure(list(id = "test"), class = "OptionContext.Test")
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
 ".test" \%in\% names(options())
-setRegistryValue(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setRegistryValue(id = "a/b/c", value = 10, where = where)
 rmRegistryValue(id = "a/b/c", where = where)
 exists("c", container$.registry$a$b, inherits = FALSE)
 
@@ -72,13 +73,13 @@ exists("c", container$.registry$a$b, inherits = FALSE)
   
 container <- initializeOptionContainer(overwrite = TRUE)
 rmRegistryValue(id = "a")
-try(rmRegistryValue(id = "a", strict = TRUE))
+try(rmRegistryValue(id = "a", strict = 2))
 
 rmRegistryValue(id = "a/b/c")
-try(rmRegistryValue(id = "a/b/c", strict = TRUE))
+try(rmRegistryValue(id = "a/b/c", strict = 2))
 
 rmRegistryValue(id = character())
-try(rmRegistryValue(id = character(), strict = TRUE))
+try(rmRegistryValue(id = character(), strict = 2))
     
 }
 }

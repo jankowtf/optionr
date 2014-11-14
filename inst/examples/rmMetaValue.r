@@ -9,7 +9,7 @@ setMetaValue(id = "a", value = TRUE)
 rmMetaValue(id = "a")
 exists("a", container$.meta, inherits = FALSE)
 
-setMetaValue(id = "a/b/c", value = 10, gap = TRUE)
+setMetaValue(id = "a/b/c", value = 10)
 rmMetaValue(id = "a/b/c")
 exists("c", container$.meta$a$b, inherits = FALSE)
 
@@ -20,14 +20,14 @@ exists("c", container$.meta$a$b, inherits = FALSE)
 where <- "test"
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
 ".test" %in% names(options())
-setMetaValue(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setMetaValue(id = "a/b/c", value = 10, where = where)
 rmMetaValue(id = "a/b/c", where = where)
 exists("c", container$.meta$a$b, inherits = FALSE)
   
 where <- structure(list(id = "test"), class = "OptionContext.Test")
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
 ".test" %in% names(options())
-setMetaValue(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setMetaValue(id = "a/b/c", value = 10, where = where)
 rmMetaValue(id = "a/b/c", where = where)
 exists("c", container$.meta$a$b, inherits = FALSE)
 
@@ -37,12 +37,12 @@ exists("c", container$.meta$a$b, inherits = FALSE)
   
 container <- initializeOptionContainer(overwrite = TRUE)
 rmMetaValue(id = "a")
-try(rmMetaValue(id = "a", strict = TRUE))
+try(rmMetaValue(id = "a", strict = 2))
 
 rmMetaValue(id = "a/b/c")
-try(rmMetaValue(id = "a/b/c", strict = TRUE))
+try(rmMetaValue(id = "a/b/c", strict = 2))
 
 rmMetaValue(id = character())
-try(rmMetaValue(id = character(), strict = TRUE))
+try(rmMetaValue(id = character(), strict = 2))
     
 }

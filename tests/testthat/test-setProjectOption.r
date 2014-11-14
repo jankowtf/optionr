@@ -16,7 +16,7 @@ test_that("setProjectOption/basics", {
   expect_equal(res <- getProjectOption(id = "test"), TRUE)
   expect_identical(container$options$test, res)
   
-  expect_true(res <- setProjectOption(id = "a/b/c", value = 10, gap = TRUE))
+  expect_true(res <- setProjectOption(id = "a/b/c", value = 10))
   expect_equal(res <- getProjectOption(id = "a/b/c"), 10)
   expect_false(res <- setProjectOption(
     id = "a/b/c/d", 
@@ -27,7 +27,7 @@ test_that("setProjectOption/basics", {
     id = "a/b/c/d", 
     value = TRUE,
     must_exist = TRUE,
-    strict = TRUE
+    strict = 2
   ))
   
   on.exit(setwd(wd_0))
@@ -60,7 +60,7 @@ test_that("setProjectOption/typed", {
     id = "a/b/c", 
     value = "hello world!",
     typed = TRUE,
-    strict_set = 1
+    strict = 1
   ))
   expect_warning(res <- setProjectOption(id = "a/b/c", value = 10))
   expect_identical(getProjectOption("a/b/c"), "hello world!")
@@ -70,7 +70,7 @@ test_that("setProjectOption/typed", {
     id = "a/b/c", 
     value = "hello world!",
     typed = TRUE,
-    strict_set = 2
+    strict = 2
   ))
   expect_error(setProjectOption(id = "a/b/c", value = 10))
   expect_identical(getProjectOption("a/b/c"), "hello world!")
@@ -118,9 +118,10 @@ test_that("setProjectOption/gap", {
   }
   
   container <- initializeOptionContainer(overwrite = TRUE)
-  expect_false(setProjectOption(id = "a/b/c/d", value = TRUE))
-  expect_error(setProjectOption(id = "a/b/c/d", value = TRUE, strict = TRUE))
-  expect_true(setProjectOption(id = "a/b/c/d", value = TRUE, gap = TRUE))
+  expect_false(setProjectOption(id = "a/b/c/d", value = TRUE, gap = FALSE))
+  expect_error(setProjectOption(id = "a/b/c/d", value = TRUE, 
+    gap = FALSE, strict = 2))
+  expect_true(setProjectOption(id = "a/b/c/d", value = TRUE))
   expect_equal(res <- getProjectOption(id = "a/b/c/d"), TRUE)
   
   on.exit(setwd(wd_0))
@@ -141,11 +142,9 @@ test_that("setProjectOption/force 1", {
   
   container <- initializeOptionContainer(overwrite = TRUE)
   expect_true(setProjectOption(id = "a", value = "hello world!"))
-  expect_false(setProjectOption(id = "a/b/c/d", value = TRUE, gap = TRUE))
-  expect_error(setProjectOption(id = "a/b/c/d", value = TRUE, 
-     gap = TRUE, strict = TRUE))
-  expect_true(setProjectOption(id = "a/b/c/d", value = TRUE, 
-     gap = TRUE, force = TRUE))
+  expect_false(setProjectOption(id = "a/b/c/d", value = TRUE))
+  expect_error(setProjectOption(id = "a/b/c/d", value = TRUE, strict = 2))
+  expect_true(setProjectOption(id = "a/b/c/d", value = TRUE, force = TRUE))
   expect_equal(res <- getProjectOption(id = "a/b/c/d"), TRUE)
   
   on.exit(setwd(wd_0))
@@ -162,9 +161,8 @@ test_that("setProjectOption/force 2", {
   
   container <- initializeOptionContainer(overwrite = TRUE)
   expect_true(setProjectOption(id = "a", value = "hello world!"))
-  expect_false(setProjectOption(id = "a/b", value = TRUE, gap = TRUE))
-  expect_error(setProjectOption(id = "a/b", value = TRUE, 
-     gap = TRUE, strict = TRUE))
+  expect_false(setProjectOption(id = "a/b", value = TRUE))
+  expect_error(setProjectOption(id = "a/b", value = TRUE, strict = 2))
   expect_true(setProjectOption(id = "a/b", value = TRUE, force = TRUE))
   expect_equal(res <- getProjectOption(id = "a/b"), TRUE)
   
@@ -187,7 +185,7 @@ test_that("setProjectOption/where", {
   where <- "test"
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(res <- setProjectOption(id = "a/b/c", value = 10, 
-    where = where, gap = TRUE))
+    where = where))
   expect_equal(res <- getProjectOption(id = "a/b/c", where = where), 10)
   expect_identical(getOptionContainer(where), container)
   expect_true(exists("a", container$options))
@@ -195,7 +193,7 @@ test_that("setProjectOption/where", {
   where <- structure(list(id = "test"), class = "OptionContext.Test")
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(res <- setProjectOption(id = "a/b/c", value = 10, 
-    where = where, gap = TRUE))
+    where = where))
   expect_equal(res <- getProjectOption(id = "a/b/c", where = where), 10)
   expect_identical(getOptionContainer(where), container)
   expect_true(exists("a", container$options))
@@ -248,13 +246,11 @@ test_that("setProjectOption/reactive/path", {
   }
   
   container <- initializeOptionContainer(overwrite = TRUE)
-  expect_true(res <- setProjectOption(id = "a/test", value = TRUE, 
-    reactive = TRUE, gap = TRUE))
+  expect_true(res <- setProjectOption(id = "a/test", value = TRUE, reactive = TRUE))
   expect_equal(res <- getProjectOption(id = "a/test"), TRUE)
   expect_true(setProjectOption(id = "b/test", 
     value = reactiveOption(!getProjectOption(id = "a/test")), 
-    reactive = TRUE, 
-    gap = TRUE
+    reactive = TRUE
   ))
   
   expect_equal(getProjectOption(id = "b/test"), FALSE)

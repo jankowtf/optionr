@@ -17,20 +17,22 @@
 #'    suitable methods in the context of managing options are defined 
 #'    (see other methods of this package that have signature arguments 
 #'    \code{id} or \code{where}).  
-#' @param strict \code{\link{logical}}. 
-#'    \code{TRUE}: the following constellations trigger an error:
+#' @param strict \code{\link{logical}}.
+#'     Controls what happens when \code{id} points to a non-existing option object:
 #'    \itemize{
-#'        \item{\code{id} pointing to a non-existing option}
-#'        \item{empty \code{id}}
-#'    }
-#'    \code{FALSE}: the stated constellations lead to the return value 
-#'    being \code{FALSE}.
+#'     	\item{0: }{ignore and return \code{FALSE} to signal that the 
+#' 				assignment process was not successful or \code{fail_value} depending
+#' 				on the value of \code{return_status}} 
+#' 			\item{1: }{ignore and with warning and return \code{FALSE}}
+#' 			\item{2: }{ignore and with error}
+#'   	}
 #' @template threedots
 #' @example inst/examples/rmAnywhereOption.r
 #' @seealso \code{
 #'   	\link[optionr]{rmAnywhereOption-char-char-method},
 #'     \link[optionr]{setAnywhereOption},
-#'     \link[optionr]{getAnywhereOption}
+#'     \link[optionr]{getAnywhereOption},
+#'     \link[optionr]{existsAnywhereOption}
 #' }
 #' @template author
 #' @template references
@@ -47,7 +49,7 @@ setGeneric(
     where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `where`")
     }),
-    strict = FALSE, 
+    strict = c(0, 1, 2), 
     ...
   ) {
     standardGeneric("rmAnywhereOption")       
@@ -183,52 +185,13 @@ setMethod(
     ...
   ) {
 
-  if (!length(id)) {
-    if (!strict) {
-      out <- FALSE
-    } else {
-      conditionr::signalCondition(
-        condition = "RemovalFailed",
-        msg = c(
-          Reason = "Empty ID"
-        ),
-        ns = "optionr",
-        type = "error"
-      )
-    }
-  } else {
-    container <- getOptionContainer(id = where)
-    envir_name <- "container"
-
-    path <- if (grepl("^\\./", id) || dirname(id) != ".") {
-      paste0("[[\"", gsub("/", "\"]][[\"", dirname(id)), "\"]]")
-    }
-    where <- eval(parse(text = paste0(envir_name, path)))
-    if (  is.null(where) ||
-          !exists(basename(id), envir = where, inherits = FALSE)) {
-      out <- NULL
-    } else {
-      rm(list = basename(id), envir = where, inherits = FALSE)
-      out <- TRUE
-    }
-    if (is.null(out)) {
-      if (!strict) {
-        out <- FALSE
-      } else {
-        conditionr::signalCondition(
-          condition = "RemovalFailed",
-          msg = c(
-            Reason = "no such option",
-            ID = id
-          ),
-          ns = "optionr",
-          type = "error"
-        )
-      }
-    }
-  }
-  
-  return(out)
+  container <- getOptionContainer(id = where)
+  nestr::rmNested(
+    id = id, 
+    where = container,
+    strict = strict, 
+    ...
+  )
     
   }
 )

@@ -5,7 +5,7 @@
 \usage{
 rmAnywhereOption(id, where = tryCatch(devtools::as.package(".")$package, error
   = function(cond) {     stop("Invalid default value for `where`") }),
-  strict = FALSE, ...)
+  strict = c(0, 1, 2), ...)
 }
 \arguments{
 \item{id}{\strong{Signature argument}.
@@ -20,13 +20,14 @@ suitable methods in the context of managing options are defined
 \code{id} or \code{where}).}
 
 \item{strict}{\code{\link{logical}}.
-\code{TRUE}: the following constellations trigger an error:
+ Controls what happens when \code{id} points to a non-existing option object:
 \itemize{
-    \item{\code{id} pointing to a non-existing option}
-    \item{empty \code{id}}
-}
-\code{FALSE}: the stated constellations lead to the return value
-being \code{FALSE}.}
+     \item{0: }{ignore and return \code{FALSE} to signal that the
+             assignment process was not successful or \code{fail_value} depending
+             on the value of \code{return_status}}
+         \item{1: }{ignore and with warning and return \code{FALSE}}
+         \item{2: }{ignore and with error}
+   }}
 
 \item{...}{Further arguments to be passed to subsequent functions/methods.}
 }
@@ -58,7 +59,7 @@ setAnywhereOption(id = "a", value = TRUE)
 rmAnywhereOption(id = "a")
 exists("a", container, inherits = FALSE)
 
-setAnywhereOption(id = "a/b/c", value = 10, gap = TRUE)
+setAnywhereOption(id = "a/b/c", value = 10)
 rmAnywhereOption(id = "a/b/c")
 exists("c", container$a$b, inherits = FALSE)
 
@@ -71,13 +72,13 @@ container <- initializeOptionContainer(id = where, overwrite = TRUE)
 ".test" \%in\% names(options())
 ## --> option container assigned to R option `.test`
 
-setAnywhereOption(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setAnywhereOption(id = "a/b/c", value = 10, where = where)
 rmAnywhereOption(id = "a/b/c", where = where)
 exists("c", container$a$b, inherits = FALSE)
 
 where <- structure(list(id = "test"), class = "OptionContext.Test")
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
-setAnywhereOption(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setAnywhereOption(id = "a/b/c", value = 10, where = where)
 rmAnywhereOption(id = "a/b/c", where = where)
 exists("c", container$a$b, inherits = FALSE)
   
@@ -87,13 +88,13 @@ exists("c", container$a$b, inherits = FALSE)
 
 container <- initializeOptionContainer(overwrite = TRUE)
 rmAnywhereOption(id = "a")
-try(rmAnywhereOption(id = "a", strict = TRUE))
+try(rmAnywhereOption(id = "a", strict = 2))
 
 rmAnywhereOption(id = "a/b/c")
-try(rmAnywhereOption(id = "a/b/c", strict = TRUE))
+try(rmAnywhereOption(id = "a/b/c", strict = 2))
 
 rmAnywhereOption(id = character())
-try(rmAnywhereOption(id = character(), strict = TRUE))
+try(rmAnywhereOption(id = character(), strict = 2))
     
 }
 }
@@ -107,7 +108,8 @@ Janko Thyson \email{janko.thyson@gmail.com}
 \code{
   	\link[optionr]{rmAnywhereOption-char-char-method},
     \link[optionr]{setAnywhereOption},
-    \link[optionr]{getAnywhereOption}
+    \link[optionr]{getAnywhereOption},
+    \link[optionr]{existsAnywhereOption}
 }
 }
 
