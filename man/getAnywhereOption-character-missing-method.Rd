@@ -8,7 +8,7 @@
 \S4method{getAnywhereOption}{character,missing}(id,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `where`") }), default = NULL,
-  strict = FALSE, ...)
+  strict = c(0, 1, 2), ...)
 }
 \arguments{
 \item{id}{\code{\link{character}}.}
@@ -17,12 +17,17 @@
 
 \item{default}{\code{\link{ANY}}.
 Value to be returned if option does not exist.
-See \code{\link[base]{getOption}}.}
+See \code{\link[base]{getOption}} and \code{\link[nestr]{getNested}}.}
 
 \item{strict}{\code{\link{logical}}.
-\code{TRUE}: \code{id} pointing to a non-existing option triggers
-error; \code{FALSE}: \code{id} pointing to a non-existing option leads
-to return value \code{NULL}.}
+ Controls what happens when \code{id} points to a non-existing option object:
+\itemize{
+       \item{0: }{ignore and return \code{FALSE} to signal that the
+             assignment process was not successful or \code{fail_value} depending
+             on the value of \code{return_status}}
+         \item{1: }{ignore and with warning and return \code{FALSE}}
+         \item{2: }{ignore and with error}
+   }}
 
 \item{...}{Further arguments to be passed to subsequent functions/methods.}
 }
@@ -46,7 +51,7 @@ container <- initializeOptionContainer(overwrite = TRUE)
 setAnywhereOption(id = "test", value = TRUE)
 getAnywhereOption(id = "test")
 
-setAnywhereOption(id = "a/b/c", value = 10, gap = TRUE)
+setAnywhereOption(id = "a/b/c", value = 10)
 getAnywhereOption(id = "a")
 getAnywhereOption(id = "a/b")
 getAnywhereOption(id = "a/b/c")
@@ -57,12 +62,12 @@ getAnywhereOption(id = "a/b/c")
 
 where <- "test"
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
-setAnywhereOption(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setAnywhereOption(id = "a/b/c", value = 10, where = where)
 getAnywhereOption(id = "a/b/c", where = where)
 
 where <- structure(list(id = "test"), class = "OptionContext.Test")
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
-setAnywhereOption(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setAnywhereOption(id = "a/b/c", value = 10, where = where)
 getAnywhereOption(id = "a/b/c", where = where)
   
 }

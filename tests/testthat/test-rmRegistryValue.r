@@ -15,7 +15,7 @@ test_that("rmRegistryValue", {
   expect_true(rmRegistryValue(id = "a"))
   expect_false(exists("a", container$.registry, inherits = FALSE))
   
-  setRegistryValue(id = "a/b/c", value = 10, gap = TRUE)
+  setRegistryValue(id = "a/b/c", value = 10)
   expect_true(rmRegistryValue(id = "a/b/c"))
   expect_false(exists("c", container$.registry$a$b, inherits = FALSE))
   
@@ -38,7 +38,7 @@ test_that("rmRegistryValue/where", {
   where <- "test"
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(".test" %in% names(options()))
-  setRegistryValue(id = "a/b/c", value = 10, where = where, gap = TRUE)
+  setRegistryValue(id = "a/b/c", value = 10, where = where)
   expect_true(rmRegistryValue(id = "a/b/c", where = where))
   expect_false(exists("c", container$.registry$a$b, inherits = FALSE))
   options(".test" = NULL)
@@ -46,7 +46,7 @@ test_that("rmRegistryValue/where", {
   where <- structure(list(id = "test"), class = "OptionContext.Test")
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(".test" %in% names(options()))
-  setRegistryValue(id = "a/b/c", value = 10, where = where, gap = TRUE)
+  setRegistryValue(id = "a/b/c", value = 10, where = where)
   expect_true(rmRegistryValue(id = "a/b/c", where = where))
   expect_false(exists("c", container$.registry$a$b, inherits = FALSE))
   
@@ -68,13 +68,13 @@ test_that("rmRegistryValue/strict", {
   
   container <- initializeOptionContainer(overwrite = TRUE)
   expect_false(rmRegistryValue(id = "a"))
-  expect_error(rmRegistryValue(id = "a", strict = TRUE))
+  expect_error(rmRegistryValue(id = "a", strict = 2))
   
   expect_false(rmRegistryValue(id = "a/b/c"))
-  expect_error(rmRegistryValue(id = "a/b/c", strict = TRUE))
+  expect_error(rmRegistryValue(id = "a/b/c", strict = 2))
   
   expect_false(rmRegistryValue(id = character()))
-  expect_error(rmRegistryValue(id = character(), strict = TRUE))
+  expect_error(rmRegistryValue(id = character(), strict = 2))
     
   on.exit(setwd(wd_0))
   

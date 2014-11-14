@@ -16,38 +16,52 @@
 #'    of a package/package project or an instance of a custom class for which
 #'    suitable methods in the context of managing options are defined 
 #'    (see other methods of this package that have signature arguments 
-#'    \code{id} or \code{where}).   
-#' @param must_exist \code{\link{logical}}. 
-#'    \code{TRUE}: \code{id} pointing to a non-existing option either triggers
-#'    an error or results in return value \code{FALSE} (depending on \code{strict}); 
-#'    \code{FALSE}: option that \code{id} points to is set.
-#' @param typed \code{\link{logical}}. 
-#'    Implies that \code{must_exist} is automatically set to \code{TRUE}.
-#'    \code{TRUE}: \code{class(value)} must match the class of the existing 
-#'    option value; 
-#'    \code{FALSE}: option that \code{id} points to is set without class check.
+#'    \code{id} or \code{where}).  
+#' @param fail_value \code{\link{ANY}}.
+#'     Value that is returned if assignment failed and \code{return_status = FALSE}.
+#' @param gap \code{\link{logical}}. 
+#'    \code{TRUE}: when \code{dirname(id)} points to a non-existing parent
+#'    branch or if there are any missing branches in the nested structure, 
+#'    then auto-create all missing branches; 
+#'    \code{FALSE}: either return with \code{fail_value} or throw a condition 
+#'     in such cases (depending on \code{strict});
 #' @param force \code{\link{logical}}. 
 #'    \code{TRUE}: when \code{dirname(id)} points to a \emph{leaf} instead of a 
 #'    \emph{branch} (i.e. \code{dirname(id)} is not an \code{environment}), 
-#'    overwrite it to turn it into a branch;
-#'    \code{FALSE}: either return with \code{FALSE} or throw error in such cases
-#'    (depending on value of \code{strict}); 
-#' @param gap \code{\link{logical}}. 
-#'    \code{TRUE}: when \code{dirname(id)} points to a non-existing parent
-#'    branch or if there are any missing branches in the path tree, 
-#'    then auto-create all missing branches; 
-#'    \code{FALSE}: either return with \code{FALSE} or throw error in such cases
-#'    (depending on \code{strict}); 
-#' @param strict \code{\link{logical}}. 
-#'    \code{TRUE}: \code{id} pointing to a non-existing option triggers
-#'    error; \code{FALSE}: \code{id} pointing to a non-existing option leads
-#'    to return value \code{NULL}.
+#'    overwrite it to turn it into a branch and vice versa when \code{id} points
+#'    to a branch that is to be transformed into a leaf;
+#'    \code{FALSE}: either return with \code{fail_value} or signal condition
+#'    depending on value of \code{strict}. 
+#' @param must_exist \code{\link{logical}}. 
+#'    \code{TRUE}: \code{id} pointing to a non-existing meta object either results 
+#'    in return value \code{fail_value} or signal a condition
+#'    depending on \code{strict}; 
+#'    \code{FALSE}: meta object that \code{id} points to is set.
 #' @param reactive \code{\link{logical}}. 
-#'    \code{TRUE}: set reactive option via 
-#'    \code{\link[optionr]{setReactive}} or \code{\link[optionr]{setShinyReactive}}.
-#'    \code{FALSE}: set regular/non-reactive option.
-#'    Note that if \code{value = reactiveOption()}, \code{reactive} is automatically
-#'    set to \code{TRUE}.
+#'    \code{TRUE}: set reactive meta object via 
+#'    \code{\link[reactr]{setShinyReactive}}.
+#'    \code{FALSE}: set regular/non-reactive meta object value.
+#'    Note that if \code{value} inherits from \code{ReactiveExpression}
+#'    (which it does if \code{\link[reactr]{reactiveExpression}} or wrappers
+#'    around this function are used), \code{reactive} is 
+#'    automatically set to \code{TRUE}.
+#' @param return_status \code{\link{logical}}.
+#'   	\code{TRUE}: return status (\code{TRUE} for successful assignment, 
+#' 			\code{FALSE} for failed assignment);
+#'    \code{FALSE}: return actual assignment value (\code{value}) or 
+#'    \code{fail_value}.
+#' @param strict \code{\link{logical}}.
+#' 		Controls what happens when \code{id} points to a non-existing meta object:
+#'    \itemize{
+#' 			\item{0: }{ignore and return \code{FALSE} to signal that the 
+#' 				assignment process was not successful or \code{fail_value} depending
+#' 				on the value of \code{return_status}} 
+#' 			\item{1: }{ignore and with warning and return \code{FALSE}}
+#' 			\item{2: }{ignore and with error}
+#'   	}
+#' @param typed \code{\link{logical}}. 
+#'    \code{TRUE}: create an implicitly typed meta object; 
+#'    \code{FALSE}: create a regular meta object.
 #' @param Further arguments to be passed along to subsequent functions.
 #'    In particular: 
 #'    \code{\link[optionr]{setShinyReactive}}.
@@ -55,6 +69,7 @@
 #' @seealso \code{
 #'   	\link[optionr]{setMetaValue-char-any-char-method},
 #'     \link[optionr]{getMetaValue},
+#'     \link[optionr]{existsMetaValue},
 #'     \link[optionr]{rmMetaValue}
 #' }
 #' @template author
@@ -74,12 +89,14 @@ setGeneric(
     where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `where`")
     }),
-    must_exist = FALSE, 
-    typed = FALSE,
+    fail_value = NULL,
     force = FALSE,
-    gap = FALSE,
-    strict = FALSE,
+    gap = TRUE,
+    must_exist = FALSE,
     reactive = FALSE,
+    return_status = TRUE,
+    strict = c(0, 1, 2),
+    typed = FALSE,
     ...
   ) {
     standardGeneric("setMetaValue")       
@@ -117,12 +134,14 @@ setMethod(
     id,
     value,
     where,
-    must_exist,
-    typed,
+    fail_value,
     force,
     gap,
-    strict,
+    must_exist,
     reactive,
+    return_status,
+    strict,
+    typed,
     ...
   ) {
     
@@ -130,12 +149,14 @@ setMethod(
     id = id,
     value = value,
     where = where,
-    must_exist = must_exist,
-    typed = typed,
+    fail_value = fail_value,
     force = force,
     gap = gap,
-    strict = strict,
+    must_exist = must_exist,
+    return_status = return_status,
     reactive = reactive,
+    strict = strict,
+    typed = typed,
     ...
   )    
     
@@ -174,12 +195,14 @@ setMethod(
     id,
     value,
     where,
-    must_exist,
-    typed,
+    fail_value,
     force,
     gap,
-    strict,
+    must_exist,
     reactive,
+    return_status,
+    strict,
+    typed,
     ...
   ) {
 
@@ -187,12 +210,14 @@ setMethod(
     id = file.path(".meta", id),
     value = value,
     where = where$id,
-    must_exist = must_exist,
-    typed = typed,
+    fail_value = fail_value,
     force = force,
     gap = gap,
-    strict = strict,
+    must_exist = must_exist,
+    return_status = return_status,
     reactive = reactive,
+    strict = strict,
+    typed = typed,
     ...
   )    
     
@@ -217,7 +242,6 @@ setMethod(
 #' @template author
 #' @template references
 #' @aliases setMetaValue-char-any-char-method
-#' @import reactr
 #' @export
 setMethod(
   f = "setMetaValue", 
@@ -230,12 +254,14 @@ setMethod(
     id,
     value,
     where,
-    must_exist,
-    typed,
+    fail_value,
     force,
     gap,
-    strict,
+    must_exist,
     reactive,
+    return_status,
+    strict,
+    typed,
     ...
   ) {
     
@@ -243,12 +269,14 @@ setMethod(
     id = file.path(".meta", id),
     value = value,
     where = where,
-    must_exist = must_exist,
-    typed = typed,
+    fail_value = fail_value,
     force = force,
     gap = gap,
-    strict = strict,
+    must_exist = must_exist,
+    return_status = return_status,
     reactive = reactive,
+    strict = strict,
+    typed = typed,
     ...
   )   
   

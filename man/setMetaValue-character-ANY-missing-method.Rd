@@ -7,9 +7,9 @@
 \usage{
 \S4method{setMetaValue}{character,ANY,missing}(id, value,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
-      stop("Invalid default value for `where`") }), must_exist = FALSE,
-  typed = FALSE, force = FALSE, gap = FALSE, strict = FALSE,
-  reactive = FALSE, ...)
+      stop("Invalid default value for `where`") }), fail_value = NULL,
+  force = FALSE, gap = TRUE, must_exist = FALSE, reactive = FALSE,
+  return_status = TRUE, strict = c(0, 1, 2), typed = FALSE, ...)
 }
 \arguments{
 \item{id}{\code{\link{character}}.}
@@ -18,42 +18,58 @@
 
 \item{where}{\code{\link{missing}}.}
 
-\item{must_exist}{\code{\link{logical}}.
-\code{TRUE}: \code{id} pointing to a non-existing option either triggers
-an error or results in return value \code{FALSE} (depending on \code{strict});
-\code{FALSE}: option that \code{id} points to is set.}
-
-\item{typed}{\code{\link{logical}}.
-Implies that \code{must_exist} is automatically set to \code{TRUE}.
-\code{TRUE}: \code{class(value)} must match the class of the existing
-option value;
-\code{FALSE}: option that \code{id} points to is set without class check.}
+\item{fail_value}{\code{\link{ANY}}.
+Value that is returned if assignment failed and \code{return_status = FALSE}.}
 
 \item{force}{\code{\link{logical}}.
 \code{TRUE}: when \code{dirname(id)} points to a \emph{leaf} instead of a
 \emph{branch} (i.e. \code{dirname(id)} is not an \code{environment}),
-overwrite it to turn it into a branch;
-\code{FALSE}: either return with \code{FALSE} or throw error in such cases
-(depending on value of \code{strict});}
+overwrite it to turn it into a branch and vice versa when \code{id} points
+to a branch that is to be transformed into a leaf;
+\code{FALSE}: either return with \code{fail_value} or signal condition
+depending on value of \code{strict}.}
 
 \item{gap}{\code{\link{logical}}.
 \code{TRUE}: when \code{dirname(id)} points to a non-existing parent
-branch or if there are any missing branches in the path tree,
+branch or if there are any missing branches in the nested structure,
 then auto-create all missing branches;
-\code{FALSE}: either return with \code{FALSE} or throw error in such cases
-(depending on \code{strict});}
+\code{FALSE}: either return with \code{fail_value} or throw a condition
+ in such cases (depending on \code{strict});}
 
-\item{strict}{\code{\link{logical}}.
-\code{TRUE}: \code{id} pointing to a non-existing option triggers
-error; \code{FALSE}: \code{id} pointing to a non-existing option leads
-to return value \code{NULL}.}
+\item{must_exist}{\code{\link{logical}}.
+\code{TRUE}: \code{id} pointing to a non-existing meta object either results
+in return value \code{fail_value} or signal a condition
+depending on \code{strict};
+\code{FALSE}: meta object that \code{id} points to is set.}
 
 \item{reactive}{\code{\link{logical}}.
-\code{TRUE}: set reactive option via
-\code{\link[optionr]{setReactive}} or \code{\link[optionr]{setShinyReactive}}.
-\code{FALSE}: set regular/non-reactive option.
-Note that if \code{value = reactiveOption()}, \code{reactive} is automatically
-set to \code{TRUE}.}
+\code{TRUE}: set reactive meta object via
+\code{\link[reactr]{setShinyReactive}}.
+\code{FALSE}: set regular/non-reactive meta object value.
+Note that if \code{value} inherits from \code{ReactiveExpression}
+(which it does if \code{\link[reactr]{reactiveExpression}} or wrappers
+around this function are used), \code{reactive} is
+automatically set to \code{TRUE}.}
+
+\item{return_status}{\code{\link{logical}}.
+   \code{TRUE}: return status (\code{TRUE} for successful assignment,
+         \code{FALSE} for failed assignment);
+\code{FALSE}: return actual assignment value (\code{value}) or
+\code{fail_value}.}
+
+\item{strict}{\code{\link{logical}}.
+     Controls what happens when \code{id} points to a non-existing meta object:
+\itemize{
+         \item{0: }{ignore and return \code{FALSE} to signal that the
+             assignment process was not successful or \code{fail_value} depending
+             on the value of \code{return_status}}
+         \item{1: }{ignore and with warning and return \code{FALSE}}
+         \item{2: }{ignore and with error}
+   }}
+
+\item{typed}{\code{\link{logical}}.
+\code{TRUE}: create an implicitly typed meta object;
+\code{FALSE}: create a regular meta object.}
 }
 \value{
 See method

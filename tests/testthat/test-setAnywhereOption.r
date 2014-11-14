@@ -19,13 +19,14 @@ test_that("setAnywhereOption/basics", {
   expect_false(res <- setAnywhereOption(
     id = "test/b", 
     value = TRUE,
-    must_exist = TRUE
+    must_exist = TRUE,
+    gap = FALSE
   ))
   expect_error(res <- setAnywhereOption(
     id = "test/b", 
     value = TRUE,
     must_exist = TRUE,
-    strict = TRUE
+    strict = 2
   ))
   
   on.exit(setwd(wd_0))
@@ -44,13 +45,15 @@ test_that("setAnywhereOption/typed", {
     wd_0 <- setwd("tests/testthat/data/test.package")
   }
   
+  container <- initializeOptionContainer(overwrite = TRUE)
+  
   ## Strict = 0 //
   expect_true(res <- setAnywhereOption(
     id = "test/a", 
     value = "hello world!",
     typed = TRUE
   ))
-  expect_true(res <- setAnywhereOption(id = "test/a", value = 10))
+  expect_true(setAnywhereOption(id = "test/a", value = 10))
   expect_identical(getAnywhereOption("test/a"), "hello world!")
   
   ## Strict = 1 //
@@ -58,7 +61,7 @@ test_that("setAnywhereOption/typed", {
     id = "test/a", 
     value = "hello world!",
     typed = TRUE,
-    strict_set = 1
+    strict = 1
   ))
   expect_warning(res <- setAnywhereOption(id = "test/a", value = 10))
   expect_identical(getAnywhereOption("test/a"), "hello world!")
@@ -68,7 +71,7 @@ test_that("setAnywhereOption/typed", {
     id = "test/a", 
     value = "hello world!",
     typed = TRUE,
-    strict_set = 2
+    strict = 2
   ))
   expect_error(setAnywhereOption(id = "test/a", value = 10))
   expect_identical(getAnywhereOption("test/a"), "hello world!")
@@ -95,7 +98,7 @@ test_that("setAnywhereOption/numerical names", {
     wd_0 <- setwd("tests/testthat/data/test.package")
   }
   
-  container <- initializeOptionContainer()
+  container <- initializeOptionContainer(overwrite = TRUE)
   expect_true(setAnywhereOption(id = "20140101", value = TRUE))
   expect_equal(res <- getAnywhereOption(id = "20140101"), TRUE)
   
@@ -115,10 +118,12 @@ test_that("setAnywhereOption/gap", {
     wd_0 <- setwd("tests/testthat/data/test.package")
   }
   
-  container <- initializeOptionContainer()
-  expect_false(setAnywhereOption(id = "a/b/c/d", value = TRUE))
-  expect_error(setAnywhereOption(id = "a/b/c/d", value = TRUE, strict = TRUE))
-  expect_true(setAnywhereOption(id = "a/b/c/d", value = TRUE, gap = TRUE))
+  container <- initializeOptionContainer(overwrite = TRUE)
+  expect_false(setAnywhereOption(id = "a/b/c/d", value = TRUE, 
+                                 gap = FALSE))
+  expect_error(setAnywhereOption(id = "a/b/c/d", value = TRUE, 
+    gap = FALSE, strict = 2))
+  expect_true(setAnywhereOption(id = "a/b/c/d", value = TRUE))
   expect_equal(res <- getAnywhereOption(id = "a/b/c/d"), TRUE)
   
   on.exit(setwd(wd_0))
@@ -129,7 +134,7 @@ test_that("setAnywhereOption/gap", {
 context("setAnywhereOption/force")
 ##------------------------------------------------------------------------------
 
-test_that("setAnywhereOption/force 1", {
+test_that("setAnywhereOption/force leaf to branch 1", {
   
   if (basename(getwd()) == "testthat") {
     wd_0 <- setwd("data/test.package")
@@ -137,20 +142,18 @@ test_that("setAnywhereOption/force 1", {
     wd_0 <- setwd("tests/testthat/data/test.package")
   }
   
-  container <- initializeOptionContainer()
+  container <- initializeOptionContainer(overwrite = TRUE)
   expect_true(setAnywhereOption(id = "a", value = "hello world!"))
-  expect_false(setAnywhereOption(id = "a/b/c/d", value = TRUE, gap = TRUE))
-  expect_error(setAnywhereOption(id = "a/b/c/d", value = TRUE, 
-     gap = TRUE, strict = TRUE))
-  expect_true(setAnywhereOption(id = "a/b/c/d", value = TRUE, 
-     gap = TRUE, force = TRUE))
-  expect_equal(res <- getAnywhereOption(id = "a/b/c/d"), TRUE)
+  expect_false(setAnywhereOption(id = "a/b/c/d", value = TRUE))
+  expect_error(setAnywhereOption(id = "a/b/c/d", value = TRUE, strict = 2))
+  expect_true(setAnywhereOption(id = "a/b/c/d", value = TRUE, force = TRUE))
+  expect_equal(getAnywhereOption(id = "a/b/c/d"), TRUE)
   
   on.exit(setwd(wd_0))
   
 })
 
-test_that("setAnywhereOption/force 2", {
+test_that("setAnywhereOption/force leaf to branch 2", {
   
   if (basename(getwd()) == "testthat") {
     wd_0 <- setwd("data/test.package")
@@ -158,13 +161,32 @@ test_that("setAnywhereOption/force 2", {
     wd_0 <- setwd("tests/testthat/data/test.package")
   }
   
-  container <- initializeOptionContainer()
+  container <- initializeOptionContainer(overwrite = TRUE)
   expect_true(setAnywhereOption(id = "a", value = "hello world!"))
-  expect_false(setAnywhereOption(id = "a/b", value = TRUE, gap = TRUE))
-  expect_error(setAnywhereOption(id = "a/b", value = TRUE, 
-     gap = TRUE, strict = TRUE))
+  expect_false(setAnywhereOption(id = "a/b", value = TRUE))
+  expect_error(setAnywhereOption(id = "a/b", value = TRUE, strict = 2))
   expect_true(setAnywhereOption(id = "a/b", value = TRUE, force = TRUE))
-  expect_equal(res <- getAnywhereOption(id = "a/b"), TRUE)
+  expect_equal(getAnywhereOption(id = "a/b"), TRUE)
+  
+  on.exit(setwd(wd_0))
+   
+})
+
+test_that("setAnywhereOption/force branch to leaf ", {
+  
+  if (basename(getwd()) == "testthat") {
+    wd_0 <- setwd("data/test.package")
+  } else {
+    wd_0 <- setwd("tests/testthat/data/test.package")
+  }
+  
+  container <- initializeOptionContainer(overwrite = TRUE)
+  expect_true(setAnywhereOption(id = "a/b", value = "hello world!"))
+  expect_false(setAnywhereOption(id = "a", value = TRUE))
+  expect_error(setAnywhereOption(id = "a", value = TRUE, strict = 2))
+  expect_true(setAnywhereOption(id = "a", value = TRUE, force = TRUE))
+  expect_equal(getAnywhereOption(id = "a"), TRUE)
+  expect_equal(getAnywhereOption(id = "a/b"), NULL)
   
   on.exit(setwd(wd_0))
    
@@ -185,7 +207,7 @@ test_that("setAnywhereOption/where", {
   where <- "test"
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(res <- setAnywhereOption(id = "a/b/c", value = 10, 
-    where = where, gap = TRUE))
+    where = where))
   expect_equal(res <- getAnywhereOption(id = "a/b/c", where = where), 10)
   expect_identical(getOptionContainer(where), container)
   expect_true(exists("a", container))
@@ -193,7 +215,7 @@ test_that("setAnywhereOption/where", {
   where <- structure(list(id = "test"), class = "OptionContext.Test")
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(res <- setAnywhereOption(id = "a/b/c", value = 10, 
-    where = where, gap = TRUE))
+    where = where))
   expect_equal(res <- getAnywhereOption(id = "a/b/c", where = where), 10)
   expect_identical(getOptionContainer(where), container)
   expect_true(exists("a", container))
@@ -214,17 +236,23 @@ test_that("setAnywhereOption/reactive/atomic", {
     wd_0 <- setwd("tests/testthat/data/test.package")
   }
   
-  container <- initializeOptionContainer()  
-  expect_true(res <- setAnywhereOption(id = "x_1", value = TRUE, reactive = TRUE))
-  expect_equal(res <- getAnywhereOption(id = "x_1"), TRUE)
+  container <- initializeOptionContainer(overwrite = TRUE)  
+  expect_true(setAnywhereOption(id = "x_1", value = TRUE, reactive = TRUE))
+  expect_equal(getAnywhereOption(id = "x_1"), TRUE)
   expect_true(res <- setAnywhereOption(id = "x_2", 
-    value = reactiveOption(
-      expr = !getAnywhereOption(id = "x_1")
+    value = reactr::reactiveExpression(
+      !getAnywhereOption(id = "x_1")
     ), 
     reactive = TRUE)
   )
-  expect_equal(res <- getAnywhereOption(id = "x_1"), TRUE)
-  expect_equal(res <- getAnywhereOption(id = "x_2"), FALSE)
+#   expect_true(res <- setAnywhereOption(id = "x_2", 
+#     value = reactiveOption(
+#       !getAnywhereOption(id = "x_1")
+#     ), 
+#     reactive = TRUE)
+#   )
+  expect_equal(getAnywhereOption(id = "x_1"), TRUE)
+  expect_equal(getAnywhereOption(id = "x_2"), FALSE)
   
   expect_true(setAnywhereOption(id = "x_1", value = FALSE))
   expect_equal(res <- getAnywhereOption(id = "x_2"), TRUE)
@@ -245,14 +273,13 @@ test_that("setAnywhereOption/reactive/path", {
     wd_0 <- setwd("tests/testthat/data/test.package")
   }
   
-  container <- initializeOptionContainer()
+  container <- initializeOptionContainer(overwrite = TRUE)
   expect_true(res <- setAnywhereOption(id = "a/test", value = TRUE, 
-    reactive = TRUE, gap = TRUE))
+    reactive = TRUE))
   expect_equal(res <- getAnywhereOption(id = "a/test"), TRUE)
   expect_true(setAnywhereOption(id = "b/test", 
     value = reactiveOption(!getAnywhereOption(id = "a/test")), 
-    reactive = TRUE, 
-    gap = TRUE
+    reactive = TRUE
   ))
   
   expect_equal(getAnywhereOption(id = "b/test"), FALSE)

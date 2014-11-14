@@ -16,7 +16,7 @@ test_that("setRegistryValue/basics", {
   expect_equal(res <- getRegistryValue(id = "test"), TRUE)
   expect_identical(container$.registry$test, res)
   
-  expect_true(res <- setRegistryValue(id = "a/b/c", value = 10, gap = TRUE))
+  expect_true(res <- setRegistryValue(id = "a/b/c", value = 10))
   expect_equal(res <- getRegistryValue(id = "a/b/c"), 10)
   expect_false(res <- setRegistryValue(
     id = "a/b/c/d", 
@@ -27,7 +27,7 @@ test_that("setRegistryValue/basics", {
     id = "a/b/c/d", 
     value = TRUE,
     must_exist = TRUE,
-    strict = TRUE
+    strict = 2
   ))
   
   on.exit(setwd(wd_0))
@@ -60,7 +60,7 @@ test_that("setRegistryValue/typed", {
     id = "a/b/c", 
     value = "hello world!",
     typed = TRUE,
-    strict_set = 1
+    strict = 1
   ))
   expect_warning(res <- setRegistryValue(id = "a/b/c", value = 10))
   expect_identical(getRegistryValue("a/b/c"), "hello world!")
@@ -70,7 +70,7 @@ test_that("setRegistryValue/typed", {
     id = "a/b/c", 
     value = "hello world!",
     typed = TRUE,
-    strict_set = 2
+    strict = 2
   ))
   expect_error(setRegistryValue(id = "a/b/c", value = 10))
   expect_identical(getRegistryValue("a/b/c"), "hello world!")
@@ -118,9 +118,10 @@ test_that("setRegistryValue/gap", {
   }
   
   container <- initializeOptionContainer(overwrite = TRUE)
-  expect_false(setRegistryValue(id = "a/b/c/d", value = TRUE))
-  expect_error(setRegistryValue(id = "a/b/c/d", value = TRUE, strict = TRUE))
-  expect_true(setRegistryValue(id = "a/b/c/d", value = TRUE, gap = TRUE))
+  expect_false(setRegistryValue(id = "a/b/c/d", value = TRUE, gap = FALSE))
+  expect_error(setRegistryValue(id = "a/b/c/d", value = TRUE, 
+    gap = FALSE, strict = 2))
+  expect_true(setRegistryValue(id = "a/b/c/d", value = TRUE))
   expect_equal(res <- getRegistryValue(id = "a/b/c/d"), TRUE)
   
   on.exit(setwd(wd_0))
@@ -141,11 +142,9 @@ test_that("setRegistryValue/force 1", {
   
   container <- initializeOptionContainer(overwrite = TRUE)
   expect_true(setRegistryValue(id = "a", value = "hello world!"))
-  expect_false(setRegistryValue(id = "a/b/c/d", value = TRUE, gap = TRUE))
-  expect_error(setRegistryValue(id = "a/b/c/d", value = TRUE, 
-     gap = TRUE, strict = TRUE))
-  expect_true(setRegistryValue(id = "a/b/c/d", value = TRUE, 
-     gap = TRUE, force = TRUE))
+  expect_false(setRegistryValue(id = "a/b/c/d", value = TRUE))
+  expect_error(setRegistryValue(id = "a/b/c/d", value = TRUE, strict = 2))
+  expect_true(setRegistryValue(id = "a/b/c/d", value = TRUE, force = TRUE))
   expect_equal(res <- getRegistryValue(id = "a/b/c/d"), TRUE)
   
   on.exit(setwd(wd_0))
@@ -162,9 +161,8 @@ test_that("setRegistryValue/force 2", {
   
   container <- initializeOptionContainer(overwrite = TRUE)
   expect_true(setRegistryValue(id = "a", value = "hello world!"))
-  expect_false(setRegistryValue(id = "a/b", value = TRUE, gap = TRUE))
-  expect_error(setRegistryValue(id = "a/b", value = TRUE, 
-     gap = TRUE, strict = TRUE))
+  expect_false(setRegistryValue(id = "a/b", value = TRUE))
+  expect_error(setRegistryValue(id = "a/b", value = TRUE, strict = 2))
   expect_true(setRegistryValue(id = "a/b", value = TRUE, force = TRUE))
   expect_equal(res <- getRegistryValue(id = "a/b"), TRUE)
   
@@ -187,7 +185,7 @@ test_that("setRegistryValue/where", {
   where <- "test"
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(res <- setRegistryValue(id = "a/b/c", value = 10, 
-    where = where, gap = TRUE))
+    where = where))
   expect_equal(res <- getRegistryValue(id = "a/b/c", where = where), 10)
   expect_identical(getOptionContainer(where), container)
   expect_true(exists("a", container$.registry))
@@ -195,7 +193,7 @@ test_that("setRegistryValue/where", {
   where <- structure(list(id = "test"), class = "OptionContext.Test")
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(res <- setRegistryValue(id = "a/b/c", value = 10, 
-    where = where, gap = TRUE))
+    where = where))
   expect_equal(res <- getRegistryValue(id = "a/b/c", where = where), 10)
   expect_identical(getOptionContainer(where), container)
   expect_true(exists("a", container$.registry))
@@ -249,12 +247,11 @@ test_that("setRegistryValue/reactive/path", {
   
   container <- initializeOptionContainer(overwrite = TRUE)
   expect_true(res <- setRegistryValue(id = "a/test", value = TRUE, 
-    reactive = TRUE, gap = TRUE))
+    reactive = TRUE))
   expect_equal(res <- getRegistryValue(id = "a/test"), TRUE)
   expect_true(setRegistryValue(id = "b/test", 
     value = reactiveOption(!getRegistryValue(id = "a/test")), 
-    reactive = TRUE, 
-    gap = TRUE
+    reactive = TRUE
   ))
   
   expect_equal(getRegistryValue(id = "b/test"), FALSE)

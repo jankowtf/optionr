@@ -18,16 +18,22 @@
 #'    \code{id} or \code{where}).  
 #' @param default \code{\link{ANY}}. 
 #'    Value to be returned if option does not exist. 
-#'    See \code{\link[base]{getProjectOption}}.
-#' @param strict \code{\link{logical}}. 
-#'    \code{TRUE}: \code{id} pointing to a non-existing option triggers
-#'    error; \code{FALSE}: \code{id} pointing to a non-existing option leads
-#'    to return value \code{NULL}.
+#'    See \code{\link[base]{getOption}} and \code{\link[nestr]{getNested}}.
+#' @param strict \code{\link{logical}}.
+#'     Controls what happens when \code{id} points to a non-existing option object:
+#'    \itemize{
+#'     	\item{0: }{ignore and return \code{FALSE} to signal that the 
+#' 				assignment process was not successful or \code{fail_value} depending
+#' 				on the value of \code{return_status}} 
+#' 			\item{1: }{ignore and with warning and return \code{FALSE}}
+#' 			\item{2: }{ignore and with error}
+#'   	}
 #' @template threedots
 #' @example inst/examples/getProjectOption.r
 #' @seealso \code{
 #'   	\link[optionr]{getProjectOption-char-char-method},
 #'    \link[optionr]{setProjectOption},
+#'    \link[optionr]{existsProjectOption},
 #'    \link[optionr]{rmProjectOption}
 #' }
 #' @template author
@@ -46,7 +52,7 @@ setGeneric(
       stop("Invalid default value for `where`")
     }),
     default = NULL,
-    strict = FALSE, 
+    strict = c(0, 1, 2), 
     ...
   ) {
     standardGeneric("getProjectOption")       
@@ -151,9 +157,10 @@ setMethod(
 #' @inheritParams getProjectOption
 #' @param id \code{\link{character}}.
 #' @param where \code{\link{character}}.
-#' @return \code{\link{ANY}}. Option value or for non-existing option 
-#'    (i.e. wrong \code{id}): \code{NULL} if \code{strict = FALSE} and an error
-#'    if \code{strict = TRUE}.
+#' @return \code{\link{ANY}}. Component value or for invalid argument input 
+#' 		and non-existing component the value of \code{default} unless 
+#' 		\code{strict == 1} in which case a warning is issued or
+#' 		\code{strict == 2} in which case an error is thrown.
 #' @example inst/examples/getProjectOption.r
 #' @seealso \code{
 #'    \link[optionr]{getProjectOption}

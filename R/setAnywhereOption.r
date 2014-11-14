@@ -1,5 +1,5 @@
 #' @title
-#' Set Free Option (generic)
+#' Set Anywhere Option (generic)
 #'
 #' @description 
 #' Sets generic option inside an option container created via 
@@ -18,44 +18,59 @@
 #'    suitable methods in the context of managing options are defined 
 #'    (see other methods of this package that have signature arguments 
 #'    \code{id} or \code{where}).  
-#' @param must_exist \code{\link{logical}}. 
-#'    \code{TRUE}: \code{id} pointing to a non-existing option either triggers
-#'    an error or results in return value \code{FALSE} (depending on \code{strict}); 
-#'    \code{FALSE}: option that \code{id} points to is set.
-#' @param typed \code{\link{logical}}. 
-#'    Implies that \code{must_exist} is automatically set to \code{TRUE}.
-#'    \code{TRUE}: \code{class(value)} must match the class of the existing 
-#'    option value; 
-#'    \code{FALSE}: option that \code{id} points to is set without class check.
+#' @param fail_value \code{\link{ANY}}.
+#'     Value that is returned if assignment failed and \code{return_status = FALSE}.
+#' @param gap \code{\link{logical}}. 
+#'    \code{TRUE}: when \code{dirname(id)} points to a non-existing parent
+#'    branch or if there are any missing branches in the nested structure, 
+#'    then auto-create all missing branches; 
+#'    \code{FALSE}: either return with \code{fail_value} or throw a condition 
+#'     in such cases (depending on \code{strict});
 #' @param force \code{\link{logical}}. 
 #'    \code{TRUE}: when \code{dirname(id)} points to a \emph{leaf} instead of a 
 #'    \emph{branch} (i.e. \code{dirname(id)} is not an \code{environment}), 
-#'    overwrite it to turn it into a branch;
-#'    \code{FALSE}: either return with \code{FALSE} or throw error in such cases
-#'    (depending on value of \code{strict}); 
-#' @param gap \code{\link{logical}}. 
-#'    \code{TRUE}: when \code{dirname(id)} points to a non-existing parent
-#'    branch or if there are any missing branches in the path tree, 
-#'    then auto-create all missing branches; 
-#'    \code{FALSE}: either return with \code{FALSE} or throw error in such cases
-#'    (depending on \code{strict}); 
-#' @param strict \code{\link{logical}}. 
-#'    \code{TRUE}: \code{id} pointing to a non-existing option triggers
-#'    error; \code{FALSE}: \code{id} pointing to a non-existing option leads
-#'    to return value \code{NULL}.
+#'    overwrite it to turn it into a branch and vice versa when \code{id} points
+#'    to a branch that is to be transformed into a leaf;
+#'    \code{FALSE}: either return with \code{fail_value} or signal condition
+#'    depending on value of \code{strict}. 
+#' @param must_exist \code{\link{logical}}. 
+#'    \code{TRUE}: \code{id} pointing to a non-existing option object either results 
+#'    in return value \code{fail_value} or signal a condition
+#'    depending on \code{strict}; 
+#'    \code{FALSE}: option object that \code{id} points to is set.
 #' @param reactive \code{\link{logical}}. 
-#'    \code{TRUE}: set reactive option via 
-#'    \code{\link[optionr]{setReactive}} or \code{\link[optionr]{setShinyReactive}}.
-#'    \code{FALSE}: set regular/non-reactive option.
-#'    Note that if \code{value = reactiveOption()}, \code{reactive} is automatically
-#'    set to \code{TRUE}.
+#'    \code{TRUE}: set reactive option object via 
+#'    \code{\link[reactr]{setShinyReactive}}.
+#'    \code{FALSE}: set regular/non-reactive option object value.
+#'    Note that if \code{value} inherits from \code{ReactiveExpression}
+#'    (which it does if \code{\link[reactr]{reactiveExpression}} or wrappers
+#'    around this function are used), \code{reactive} is 
+#'    automatically set to \code{TRUE}.
+#' @param return_status \code{\link{logical}}.
+#'   	\code{TRUE}: return status (\code{TRUE} for successful assignment, 
+#' 			\code{FALSE} for failed assignment);
+#'    \code{FALSE}: return actual assignment value (\code{value}) or 
+#'    \code{fail_value}.
+#' @param strict \code{\link{logical}}.
+#' 		Controls what happens when \code{id} points to a non-existing option object:
+#'    \itemize{
+#' 			\item{0: }{ignore and return \code{FALSE} to signal that the 
+#' 				assignment process was not successful or \code{fail_value} depending
+#' 				on the value of \code{return_status}} 
+#' 			\item{1: }{ignore and with warning and return \code{FALSE}}
+#' 			\item{2: }{ignore and with error}
+#'   	}
+#' @param typed \code{\link{logical}}. 
+#'    \code{TRUE}: create an implicitly typed option object; 
+#'    \code{FALSE}: create a regular option object.
 #' @param Further arguments to be passed along to subsequent functions.
 #'    In particular: 
-#'    \code{\link[optionr]{setShinyReactive}}.
+#'    \code{\link[optionr]{setNested}}.
 #' @example inst/examples/setAnywhereOption.r
 #' @seealso \code{
 #'   	\link[optionr]{setAnywhereOption-char-any-char-method},
 #'     \link[optionr]{getAnywhereOption},
+#'     \link[optionr]{existsAnywhereOption},
 #'     \link[optionr]{rmAnywhereOption}
 #' }
 #' @template author
@@ -75,12 +90,14 @@ setGeneric(
     where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `where`")
     }),
-    must_exist = FALSE, 
-    typed = FALSE,
+    fail_value = NULL,
     force = FALSE,
-    gap = FALSE,
-    strict = FALSE,
+    gap = TRUE,
+    must_exist = FALSE,
     reactive = FALSE,
+    return_status = TRUE,
+    strict = c(0, 1, 2),
+    typed = FALSE,
     ...
   ) {
     standardGeneric("setAnywhereOption")       
@@ -88,7 +105,7 @@ setGeneric(
 )
 
 #' @title
-#' Set Free Option (char-any-miss)
+#' Set Anywhere Option (char-any-miss)
 #'
 #' @description 
 #' See generic: \code{\link[optionr]{setAnywhereOption}}
@@ -118,12 +135,14 @@ setMethod(
     id,
     value,
     where,
-    must_exist,
-    typed,
+    fail_value,
     force,
     gap,
-    strict,
+    must_exist,
     reactive,
+    return_status,
+    strict,
+    typed,
     ...
   ) {
     
@@ -131,12 +150,14 @@ setMethod(
     id = id,
     value = value,
     where = where,
-    must_exist = must_exist,
-    typed = typed,
+    fail_value = fail_value,
     force = force,
     gap = gap,
-    strict = strict,
+    must_exist = must_exist,
+    return_status = return_status,
     reactive = reactive,
+    strict = strict,
+    typed = typed,
     ...
   )    
     
@@ -144,7 +165,7 @@ setMethod(
 )
 
 #' @title
-#' Set Free Option (char-any-any)
+#' Set Anywhere Option (char-any-any)
 #'
 #' @description 
 #' See generic: \code{\link[optionr]{setAnywhereOption}}
@@ -175,12 +196,14 @@ setMethod(
     id,
     value,
     where,
-    must_exist,
-    typed,
+    fail_value,
     force,
     gap,
-    strict,
+    must_exist,
     reactive,
+    return_status,
+    strict,
+    typed,
     ...
   ) {
     
@@ -199,12 +222,14 @@ setMethod(
     id = id,
     value = value,
     where = where$id,
-    must_exist = must_exist,
-    typed = typed,
+    fail_value = fail_value,
     force = force,
     gap = gap,
-    strict = strict,
+    must_exist = must_exist,
+    return_status = return_status,
     reactive = reactive,
+    strict = strict,
+    typed = typed,
     ...
   )    
     
@@ -212,7 +237,7 @@ setMethod(
 )
 
 #' @title
-#' Set Free Option (char-any-char)
+#' Set Anywhere Option (char-any-char)
 #'
 #' @description 
 #' See generic: \code{\link[optionr]{setAnywhereOption}}
@@ -229,7 +254,7 @@ setMethod(
 #' @template author
 #' @template references
 #' @aliases setAnywhereOption-char-any-char-method
-#' @import reactr
+#' @import nestr
 #' @export
 setMethod(
   f = "setAnywhereOption", 
@@ -242,263 +267,31 @@ setMethod(
     id,
     value,
     where,
-    must_exist,
-    typed,
+    fail_value,
     force,
     gap,
-    strict,
+    must_exist,
     reactive,
+    return_status,
+    strict,
+    typed,
     ...
   ) {
     
-  out <- TRUE
   container <- ensureOptionContainer(id = where, check = FALSE)
-  envir_name <- "container"
-  
-  ## Adjustments //
-#   if (typed) {
-#     must_exist <- TRUE
-#   }
-  if (inherits(value, "ReactiveOption")) {
-    reactive <- TRUE
-  }
-  
-  ## Direct parent check //
-  id_branch <- dirname(id)
-  if (!grepl("^\\./", id) && id_branch == ".") {
-    branch_value <- container
-  } else {
-    branch_value <- tryCatch(
-      getAnywhereOption(id = id_branch, where = where, strict = FALSE),
-      error = function(cond) {
-        NULL
-      }
-    )
-  }
-  
-  ## Handling branch gaps //
-  if (is.null(branch_value)) {
-    if (gap) {
-      ## Check how much to fill //
-      id_branch_spl <- unlist(strsplit(id_branch, split = "/"))
-      id_branch_tree <- NULL
-      expr_get <- NULL
-      expr_set <- NULL
-      for (ii in 1:length(id_branch_spl)) {
-        expr_get <- c(expr_get, 
-          paste0(envir_name, "[[\"", paste(id_branch_spl[1:ii], collapse = "\"]][[\""),
-             "\"]]"))
-        expr_set <- c(expr_set, 
-          paste0(envir_name, "[[\"", paste(id_branch_spl[1:ii], collapse = "\"]][[\""),
-          "\"]] <- new.env()"))
-        id_branch_tree <- c(id_branch_tree, paste(id_branch_spl[1:ii], collapse = "/"))
-      }
-      
-      ## Determine component types //
-      ## * yes --> branch
-      ## * no --> leaf or not existing
-      ## * error --> error
-      idx <- sapply(expr_get, function(ii) {
-        tryCatch({
-          tmp <- switch(
-            as.character(inherits(eval(parse(text = ii)), "environment")),
-            "TRUE" = "yes",
-            "FALSE" = "no"
-          )},
-          error = function(cond) {
-            "error"
-          }
-        )
-      }) 
-
-      ## Invalid branch(es) //
-      if (any(idx == "no") & any(idx == "error")) {
-        idx_no <- which(idx == "no")
-        if (length(idx_no)) {
-          if (force) {
-          ## Ensure that leafs are transformed to branches //            
-            setAnywhereOption(
-              id = id_branch_tree[idx_no],
-              value = new.env(),
-              where = where
-            )
-            
-            ## Update `idx` and `expr_set` //
-            idx <- idx[-idx_no]
-            expr_set <- expr_set[-idx_no]
-            
-            ## Remove error entry //
-            idx[which(idx == "error")] <- "no"
-          } else {
-            if (!strict) {
-              out <- FALSE
-            } else {
-              conditionr::signalCondition(
-                condition = "InvalidBranchConstellation",
-                msg = c(
-                  "Parent branch is not an environment",
-                  ID = id,
-                  "ID branch" = id_branch_tree[idx_no]
-                ),
-                ns = "optionr",
-                type = "error"
-              )  
-            }
-          }
-        }
-      }
-      
-      ## Gap not-yet-existing branch(es) //
-      idx_no <- which(idx == "no")
-      if (out) {
-        if (length(idx_no)) {
-          run_scope <- idx_no[1]:length(expr_set)
-#         } else {
-#           run_scope <- 1:length(expr_set)
-#         }
-        
-#         if (length(run_scope)) {
-          sapply(run_scope, function(ii) {
-            eval(parse(text = expr_set[ii]))
-          })  
-          branch_value <- getAnywhereOption(id = id_branch, 
-            where = where, strict = FALSE)
-        }
-      }
-    } else {
-      if (!strict) {
-        out <- FALSE
-      } else {
-        conditionr::signalCondition(
-          condition = "InvalidBranchConstellation",
-          msg = c(
-            "Branch gap",
-            ID = id
-          ),
-          ns = "optionr",
-          type = "error"
-        )
-      }
-    }
-  }
-
-  ## Early exit //
-  if (!out) {
-    return(out)
-  }
-  
-  ## Parent branch is no environment //
-  if (!inherits(branch_value, "environment")) {
-    if (force) {
-    ## Transform to branch //
-      expr_set <- paste0(envir_name, "$", gsub("/", 
-        "$", id_branch), " <- new.env()")
-      eval(parse(text = expr_set))
-    } else {
-      if (!strict) {
-        out <- FALSE
-      } else {
-        conditionr::signalCondition(
-          condition = "InvalidBranchConstellation",
-          msg = c(
-            "Parent branch is not an environment",
-            ID = id,
-            "ID branch" = id_branch,
-            "Class branch" = class(branch_value)
-          ),
-          ns = "optionr",
-          type = "error"
-        )
-      }
-    }
-  }
-
-  ## Early exit //
-  if (!out) {
-    return(out)
-  }
-
-  ## Must exist //
-  if (must_exist) {
-    if (!exists(basename(id), envir = branch_value, inherits = FALSE)) {
-      if (!strict) {
-        out <- FALSE
-      } else {
-        conditionr::signalCondition(
-          condition = "OptionPrerequisitesNotMet",
-          msg = c(
-            "Option does not exist yet",
-            ID = id
-          ),
-          ns = "optionr",
-          type = "error"
-        )
-      }
-    }
-  }
-
-  ## Early exit //
-  if (!out) {
-    return(out)
-  }
-  
-  ## Match class for typed options //
-## LEGACY, keep as reference
-#   if (typed) {
-#     value_0 <- get(basename(id), envir = branch_value, inherits = FALSE)
-#     cl_0 <- class(value_0)
-#     cl_1 <- class(value)
-#     if (!inherits(value_0, cl_1)) {
-#       if (!strict) {
-#         out <- FALSE
-#       } else {
-#         conditionr::signalCondition(
-#           condition = "OptionPrerequisitesNotMet",
-#           msg = c(
-#             "New value has invalid class",
-#             ID = id,
-#             "Class expected" = cl_0,
-#             "Class provided" = cl_1
-#           ),
-#           ns = "optionr",
-#           type = "error"
-#         )
-#       }
-#     }
-#   }
-
-  ## Early exit //
-  if (!out) {
-    return(out)
-  }
-
-  ## Auto-check if reactive //
-  ## This significantly speeds up the assignment process for reactive *sources* 
-  ## that already exist as `setShinyReactive()` does not need to be called again
-  path <- if (grepl("^\\./", id) || dirname(id) != ".") {
-    paste0("[[\"", gsub("/", "\"]][[\"", dirname(id)), "\"]]")
-  }
-  where <- eval(parse(text = paste0(envir_name, path)))
-  reactive_exist <- isReactive(id = basename(id), where = where)
-
-  ## This takes care that reactive observers will always updated when this 
-  ## function is run:
-  is_reactive_option <- inherits(value, "ReactiveOption")
-  
-  if (!reactive && !typed || reactive_exist && !typed && !is_reactive_option) {  
-    path <- paste0("[[\"", gsub("/", "\"]][[\"", id), "\"]]")
-    expr <- paste0(envir_name, path, " <- value")
-    eval(parse(text = expr))  
-  } else {
-#     path <- if (grepl("^\\./", id) || dirname(id) != ".") {
-#       paste0("[[\"", gsub("/", "\"]][[\"", dirname(id)), "\"]]")
-#     }
-#     where <- eval(parse(text = paste0(envir_name, path)))
-    setShinyReactive(id = basename(id), value = value, 
-      where = where, typed = typed, ...)
-  }
-
-  return(out)
+  setNested(
+    id = id, 
+    value = value, 
+    where = container, 
+    fail_value = fail_value,
+    force = force,
+    gap = gap,
+    must_exist = must_exist,
+    return_status = return_status,
+    reactive = reactive,
+    strict = strict,
+    typed = typed,
+  )
   
   }
 )

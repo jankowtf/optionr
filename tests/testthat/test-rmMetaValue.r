@@ -15,7 +15,7 @@ test_that("rmMetaValue", {
   expect_true(rmMetaValue(id = "a"))
   expect_false(exists("a", container$.meta, inherits = FALSE))
   
-  setMetaValue(id = "a/b/c", value = 10, gap = TRUE)
+  setMetaValue(id = "a/b/c", value = 10)
   expect_true(rmMetaValue(id = "a/b/c"))
   expect_false(exists("c", container$.meta$a$b, inherits = FALSE))
   
@@ -38,7 +38,7 @@ test_that("rmMetaValue/where", {
   where <- "test"
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(".test" %in% names(options()))
-  setMetaValue(id = "a/b/c", value = 10, where = where, gap = TRUE)
+  setMetaValue(id = "a/b/c", value = 10, where = where)
   expect_true(rmMetaValue(id = "a/b/c", where = where))
   expect_false(exists("c", container$.meta$a$b, inherits = FALSE))
   options(".test" = NULL)
@@ -46,7 +46,7 @@ test_that("rmMetaValue/where", {
   where <- structure(list(id = "test"), class = "OptionContext.Test")
   container <- initializeOptionContainer(id = where, overwrite = TRUE)
   expect_true(".test" %in% names(options()))
-  setMetaValue(id = "a/b/c", value = 10, where = where, gap = TRUE)
+  setMetaValue(id = "a/b/c", value = 10, where = where)
   expect_true(rmMetaValue(id = "a/b/c", where = where))
   expect_false(exists("c", container$.meta$a$b, inherits = FALSE))
   
@@ -68,13 +68,13 @@ test_that("rmMetaValue/strict", {
   
   container <- initializeOptionContainer(overwrite = TRUE)
   expect_false(rmMetaValue(id = "a"))
-  expect_error(rmMetaValue(id = "a", strict = TRUE))
+  expect_error(rmMetaValue(id = "a", strict = 2))
   
   expect_false(rmMetaValue(id = "a/b/c"))
-  expect_error(rmMetaValue(id = "a/b/c", strict = TRUE))
+  expect_error(rmMetaValue(id = "a/b/c", strict = 2))
   
   expect_false(rmMetaValue(id = character()))
-  expect_error(rmMetaValue(id = character(), strict = TRUE))
+  expect_error(rmMetaValue(id = character(), strict = 2))
     
   on.exit(setwd(wd_0))
   

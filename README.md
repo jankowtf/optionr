@@ -103,14 +103,17 @@ The following functions are convenience wrappers around `setAnywhereOption()` an
 
 ```
 setProjectOption(id = "x_1", value = TRUE)
+existsProjectOption(id = "x_1")
 getProjectOption(id = "x_1")
+rmProjectOption(id = "x_1")
+existsProjectOption(id = "x_1")
+## --> removed
 ```
 
 ### Path-like name/ID resulting in nested/tree-like option structures 
 
 ```
-setProjectOption(id = "x_2/a/b", value = 10, gap = TRUE)
-## --> `gap = TRUE` is necessary to span the branches (`x_2` and `a`) for leaf `b`
+setProjectOption(id = "x_2/a/b", value = 10)
 getProjectOption(id = "x_2")
 ## --> branch
 getProjectOption(id = "x_2/a")
@@ -124,8 +127,8 @@ getProjectOption(id = "x_2/a/b")
 Implicit typing by remembering the type/class when setting an option:
 
 ```
-setProjectOption(id = "a", value = "abc", typed = TRUE, strict_set = 2)
-## --> `strict_set` controls how strict you would like to be with respect to 
+setProjectOption(id = "a", value = "abc", typed = TRUE, strict = 2)
+## --> `strict` controls how strict you would like to be with respect to 
 ## what happens when trying to assign values of the wrong type/class
 
 setProjectOption(id = "a", value = 1:3)
@@ -139,11 +142,10 @@ getProjectOption(id = "a")
 ### Reactive options
 
 ```
-setProjectOption(id = "dirs/wd", value = getwd(), gap = TRUE, reactive = TRUE)
+setProjectOption(id = "dirs/wd", value = getwd(), reactive = TRUE)
 setProjectOption(
   id = "dirs/reactive_subdir", 
-  value = reactiveOption(file.path(getProjectOption("dirs/wd"), "my_directory")), 
-  gap = TRUE
+  value = reactiveOption(file.path(getProjectOption("dirs/wd"), "my_directory"))
 )
 getProjectOption(id = "dirs/wd")
 getProjectOption(id = "dirs/reactive_subdir")
@@ -165,9 +167,12 @@ Also see the function controlling the initialization: `initializeMeta()`
 The following functions are convenience wrappers around `setAnywhereOption()` and `getAnywhereOption()` (see section below).
 
 ```
-setMetaValue(id = "a/b/c", value = 10, gap = TRUE)
+setMetaValue(id = "a/b/c", value = 10)
+existsMetaValue(id = "a/b/c")
 getMetaValue(id = "a/b/c")
 identical(getMetaValue(id = "a/b/c"), container$.meta$a$b$c)
+rmMetaValue(id = "a/b/c")
+existsMetaValue(id = "a/b/c")
 ```
 
 -----
@@ -183,9 +188,12 @@ Also see the function controlling the initialization: `initializeRegistry()`
 The following functions are convenience wrappers around `setAnywhereOption()` and `getAnywhereOption()` (see section below).
 
 ```
-setRegistryValue(id = "a/b/c", value = 10, gap = TRUE)
+setRegistryValue(id = "a/b/c", value = 10)
+existsRegistryValue(id = "a/b/c")
 getRegistryValue(id = "a/b/c")
 identical(getRegistryValue(id = "a/b/c"), container$.registry$a$b$c)
+rmRegistryValue(id = "a/b/c")
+existsRegistryValue(id = "a/b/c")
 ```
 
 -----
@@ -197,19 +205,11 @@ The actual workhorse functions that are called by the convenvience function desc
 These let you set (retrieve) options (from) anywhere in an option container. 
 
 ```
-setAnywhereOption("directly/below/option/container", 1:3, gap = TRUE)
+setAnywhereOption("directly/below/option/container", 1:3)
+existsAnywhereOption("directly/below/option/container")
 getAnywhereOption("directly/below/option/container")
 ls(container, all.names = TRUE)
 container$directly$below$option$container
+rmAnywhereOption("directly/below/option/container")
+existsAnywhereOption("directly/below/option/container")
 ```
-
------
-
-## Remove components
-
-In order to remove components from an option container, use one of these methods:
-
-- `rmProjectOption()`
-- `rmMetaValue()`
-- `rmRegistryValue()`
-- `rmAnywhereOption()`

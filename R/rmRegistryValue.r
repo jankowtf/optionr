@@ -16,20 +16,22 @@
 #'    suitable methods in the context of managing options are defined 
 #'    (see other methods of this package that have signature arguments 
 #'    \code{id} or \code{where}).  
-#' @param strict \code{\link{logical}}. 
-#'    \code{TRUE}: the following constellations trigger an error:
+#' @param strict \code{\link{logical}}.
+#'     Controls what happens when \code{id} points to a non-existing registry object:
 #'    \itemize{
-#'        \item{\code{id} pointing to a non-existing option}
-#'        \item{empty \code{id}}
-#'    }
-#'    \code{FALSE}: the stated constellations lead to the return value 
-#'    being \code{FALSE}.
+#'       \item{0: }{ignore and return \code{FALSE} to signal that the 
+#' 				assignment process was not successful or \code{fail_value} depending
+#' 				on the value of \code{return_status}} 
+#' 			\item{1: }{ignore and with warning and return \code{FALSE}}
+#' 			\item{2: }{ignore and with error}
+#'   	}
 #' @template threedots
 #' @example inst/examples/rmRegistryValue.r
 #' @seealso \code{
 #'   	\link[optionr]{rmRegistryValue-char-char-method},
 #'     \link[optionr]{setRegistryValue},
-#'     \link[optionr]{getRegistryValue}
+#'     \link[optionr]{getRegistryValue},
+#'     \link[optionr]{existsRegistryValue}
 #' }
 #' @template author
 #' @template references
@@ -46,7 +48,7 @@ setGeneric(
     where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `where`")
     }),
-    strict = FALSE, 
+    strict = c(0, 1, 2), 
     ...
   ) {
     standardGeneric("rmRegistryValue")       
@@ -147,9 +149,10 @@ setMethod(
 #' @inheritParams rmRegistryValue
 #' @param id \code{\link{character}}.
 #' @param where \code{\link{character}}.
-#' @return \code{\link{ANY}}. Option value or for non-existing option 
-#'    (i.e. wrong \code{id}): \code{NULL} if \code{strict = FALSE} and an error
-#'    if \code{strict = TRUE}.
+#' @return \code{\link{ANY}}. Component value or for invalid argument input 
+#' 		and non-existing component the value of \code{default} unless 
+#' 		\code{strict == 1} in which case a warning is issued or
+#' 		\code{strict == 2} in which case an error is thrown.
 #' @example inst/examples/rmRegistryValue.r
 #' @seealso \code{
 #'    \link[optionr]{rmRegistryValue}

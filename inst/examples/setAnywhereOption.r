@@ -23,22 +23,22 @@ getAnywhereOption(id = "test/a")
 
 ## Must exist //
 setAnywhereOption(id = "test/b", value = TRUE, must_exist = TRUE)
-try(setAnywhereOption(id = "test/b", value = TRUE, must_exist = TRUE, strict = TRUE))
+try(setAnywhereOption(id = "test/b", value = TRUE, must_exist = TRUE, strict = 2))
 
 ## Typed //
-setAnywhereOption(id = "test/c", value = "hello world!", typed = TRUE, gap = TRUE)
+setAnywhereOption(id = "test/c", value = "hello world!", typed = TRUE)
 setAnywhereOption(id = "test/c", value = 1:3)
-## --> wrong class, but `strict_set = 0` --> disregarded without warning or error
+## --> wrong class, but `strict = 0` --> disregarded without warning or error
 getAnywhereOption(id = "test/c")
 ## --> still `hello world!` because `value = 1:3` had wrong class
 
-setAnywhereOption(id = "test/c", value = "hello world!", typed = TRUE, strict_set = 1)
+setAnywhereOption(id = "test/c", value = "hello world!", typed = TRUE, strict = 1)
 try(setAnywhereOption(id = "test/c", value = 1:3))
 ## --> warning and no assignment
 getAnywhereOption(id = "test/c")
 ## --> still `hello world!`
 
-setAnywhereOption(id = "test/c", value = "hello world!", typed = TRUE, strict_set = 2)
+setAnywhereOption(id = "test/c", value = "hello world!", typed = TRUE, strict = 2)
 try(setAnywhereOption(id = "test/c", value = 1:3))
 ## --> error
 getAnywhereOption(id = "test/c")
@@ -63,11 +63,11 @@ getAnywhereOption(id = "20140101")
   
 container <- initializeOptionContainer(overwrite = TRUE)
 setAnywhereOption(id = "a/b/c/d", value = TRUE)
-try(setAnywhereOption(id = "a/b/c/d", value = TRUE, strict = TRUE))
+try(setAnywhereOption(id = "a/b/c/d", value = TRUE, strict = 2))
 ## --> branch gap: branches a, b and c do not exist yet
 
 ## Closing the gap //
-setAnywhereOption(id = "a/b/c/d", value = TRUE, gap = TRUE)
+setAnywhereOption(id = "a/b/c/d", value = TRUE)
 
 ## Inspect //
 ls(container)
@@ -82,8 +82,8 @@ getAnywhereOption(id = "a/b/c/d")
   
 container <- initializeOptionContainer(overwrite = TRUE)
 setAnywhereOption(id = "a", value = "hello world!")
-setAnywhereOption(id = "a/b", value = 10, gap = TRUE)
-try(setAnywhereOption(id = "a/b", value = 10, gap = TRUE, strict = TRUE))
+setAnywhereOption(id = "a/b", value = 10)
+try(setAnywhereOption(id = "a/b", value = 10, strict = 2))
 ## --> starting branch `a` is not an environment 
 getAnywhereOption(id = "a")
 
@@ -98,14 +98,14 @@ getAnywhereOption(id = "a/b")
 
 where <- "test"
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
-setAnywhereOption(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setAnywhereOption(id = "a/b/c", value = 10, where = where)
 getAnywhereOption(id = "a/b/c", where = where)
 identical(getOptionContainer(where), container)
 exists("a", container)
 
 where <- structure(list(id = "test"), class = "OptionContext.Test")
 container <- initializeOptionContainer(id = where, overwrite = TRUE)
-setAnywhereOption(id = "a/b/c", value = 10, where = where, gap = TRUE)
+setAnywhereOption(id = "a/b/c", value = 10, where = where)
 getAnywhereOption(id = "a/b/c", where = where)
 identical(getOptionContainer(where), container)
 exists("a", container)
@@ -140,17 +140,16 @@ container$x_2
 ## Trying to change bound variable //
 setAnywhereOption(id = "x_2", value = TRUE)
 getAnywhereOption(id = "x_2")
-## --> has no effect; warning and error behavior can be specified via `strict_set`
+## --> has no effect; warning and error behavior can be specified via `strict`
 
 ##------------------------------------------------------------------------------
 ## Reactive options: path-like name/ID //
 ##------------------------------------------------------------------------------
 
 container <- initializeOptionContainer(overwrite = TRUE)
-setAnywhereOption(id = "a/test", value = TRUE, reactive = TRUE, gap = TRUE)
+setAnywhereOption(id = "a/test", value = TRUE, reactive = TRUE)
 setAnywhereOption(id = "b/test", 
-  value = reactiveOption(!getAnywhereOption(id = "a/test")), 
-  gap = TRUE
+  value = reactiveOption(!getAnywhereOption(id = "a/test"))
 )
 
 getAnywhereOption(id = "a/test")  
