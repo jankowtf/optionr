@@ -14,7 +14,7 @@ require("optionr")
 ```
 ## Purpose 
 
-The package provides an extendable interface to conveniently create customized project/package options. Options can be specified and retrieved based on path-like names/identifiers (e.g. `output/type/pdf = TRUE` will be translated into the following nested environment structure: `output$type$pdf` with the value being `TRUE`).
+The package provides an extendable interface to conveniently create customized project/package options. Options can be specified and retrieved based on path-like names/identifiers (e.g. `output/print/type = "pdf"` will be translated into the following nested environment structure: `output$print$type` with the value being `"pdf"`).
 
 Also, it allows to specify reactive options, i.e. options that are dynamically linked to other options and thus automatically stay synced.
 
