@@ -8,7 +8,7 @@ Management of customized (and nested) project/package options
 ```
 require("devtools")
 devtools::install_github("Rappster/conditionr")
-devtools::install_github("Rappster/reactr")
+devtools::install_github("Rappster/nestr")
 devtools::install_github("Rappster/optionr")
 require("optionr")
 ```
