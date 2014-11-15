@@ -79,7 +79,10 @@ automatically set to \code{TRUE}.}
 
 \item{Further}{arguments to be passed along to subsequent functions.
 In particular:
-\code{\link[optionr]{setNested}}.}
+\itemize{
+  \item{\code{\link[nestr]{setNested}} and any function that it calls and
+    that take \code{...}}
+}}
 }
 \description{
 Sets generic option inside an option container created via
