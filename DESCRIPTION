@@ -20,4 +20,5 @@ Repository: CRAN
 Imports:
     conditionr,
     devtools,
-    nestr
+    nestr,
+    shiny
