@@ -1,3 +1,21 @@
+# CHANGES IN optionr VERSION 0.3.1
+
+## NEW FEATURES
+
+## BUG FIXES
+
+- fixed: #1 
+  Bug in `setAnywhereOption()` related to a trailing comma.
+  Also see this [Stackoverflow thread](http://stackoverflow.com/questions/26940474/lexical-scoping-calling-stack-issue-r-fails-to-recognize-an-arguments-defaul)
+
+## MAJOR CHANGES
+
+## MINOR CHANGES
+
+## MISC
+
+-----
+
 # CHANGES IN optionr VERSION 0.3
 
 ## NEW FEATURES

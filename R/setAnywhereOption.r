@@ -65,7 +65,10 @@
 #'    \code{FALSE}: create a regular option object.
 #' @param Further arguments to be passed along to subsequent functions.
 #'    In particular: 
-#'    \code{\link[optionr]{setNested}}.
+#'    \itemize{
+#'      \item{\code{\link[nestr]{setNested}} and any function that it calls and
+#'        that take \code{...}}
+#'    }
 #' @example inst/examples/setAnywhereOption.r
 #' @seealso \code{
 #'   	\link[optionr]{setAnywhereOption-char-any-char-method},
@@ -291,6 +294,7 @@ setMethod(
     reactive = reactive,
     strict = strict,
     typed = typed,
+    ...
   )
   
   }
