@@ -62,7 +62,7 @@ ls(container, all.names = TRUE)
 
 A slightly more pre-configured version of such an option container is created/ensured via `initializeOptionContainer()` which is the preferred top-level function to making sure an option container exists.
 
-The container already has three elements (which are in turn `environment`s) for reasons of a better encapsulation of option container components:
+The container already has three elements (which in turn are `environment`s) for reasons of a better encapsulation of option container components:
 
 1. `options`: 
 
@@ -179,7 +179,7 @@ existsMetaValue(id = "a/b/c")
 
 ## Registry values
 
-Sometimes I found it usefull to have a central place for keeping certain registry information (e.g. see package [optionr](https://github.com/Rappster/reactr)). 
+Sometimes I found it usefull to have a central place for keeping certain registry information (e.g. see package [reactr](https://github.com/Rappster/reactr#the-registry)). 
 
 By default, they live in environment `.registry` below the root level of the option container. The existence of this environment can be suppressed by specifying `components` accordingly in the call to `initializeOptionContainer()`.
 
