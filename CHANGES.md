@@ -1,3 +1,9 @@
+# Version 0.3.2
+ - Version bump to 1.1
+ - fixed #1
+
+----------
+
 # Version 0.3.1
  - Merge branch 'master' into develop
  - Merge branch 'release-0.3'

@@ -1,23 +1,19 @@
 Package: optionr
 Type: Package
 Title: Management of customized (and nested) project/package options
-Version: 0.3.1
-Date: 2014-11-15 15:00:43
+Version: 0.3.2
+Date: 2014-12-03 17:25:55
 Author: Janko Thyson [aut, cre]
 Maintainer: Janko Thyson <janko.thyson@gmail.com>
 Description: The package provides an extendable interface to conveniently create
-    customized project/package options. Options can be specified and
-    retrieved based on path-like names/identifiers (e.g. `output/type/pdf =
-    TRUE` will be translated into the following nested environment
-    structure: `output$type$pdf` with the value being `TRUE`). Also, it
-    allows to specify reactive options, i.e. options that are dynamically
-    linked to other options and thus automatically stay synced.
+         customized project/package options. Options can be specified and retrieved
+         based on path-like names/identifiers (e.g. `output/type/pdf = TRUE` will be
+         translated into the following nested environment structure:
+         `output$type$pdf` with the value being `TRUE`). Also, it allows to specify
+         reactive options, i.e. options that are dynamically linked to other options
+         and thus automatically stay synced.
 License: GPL (>= 2)
 Roxygen: list(wrap = FALSE)
 NeedsCompilation: no
 Repository: CRAN
-Imports:
-    conditionr,
-    devtools,
-    nestr,
-    shiny
+Imports: conditionr, devtools, nestr, shiny
