@@ -1,7 +1,7 @@
 \dontrun{
 
 ##------------------------------------------------------------------------------
-## Default `id` //
+## Default ID //
 ##------------------------------------------------------------------------------
 
 options(".optionr" = NULL)
@@ -14,6 +14,30 @@ identical(getOption(".optionr"), res)
 
 ## Clean up //
 options(".optionr" = NULL)
+
+##------------------------------------------------------------------------------
+## Explicit ID //
+##------------------------------------------------------------------------------
+
+res <- ensureOptionContainer(id = "abcd")
+".abcd" %in% names(options())
+ensureOptionContainer(id = "abcd", overwrite = TRUE)
+identical(getOption(".abcd"), res)
+## --> identical environment object is reused --> ensures pass-by-references
+## keeps working even when `overwrite = TRUE`
+
+## Clean up //
+options(".abcd" = NULL)
+
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+res <- ensureOptionContainer(id = "abcd", sub_id = "a")
+"a" %in% ls(res)
+
+## Clean up //
+options(".abcd" = NULL)
 
 ##------------------------------------------------------------------------------
 ## Not hidden //

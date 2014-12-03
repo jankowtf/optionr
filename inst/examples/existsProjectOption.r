@@ -40,4 +40,14 @@ existsProjectOption(id = "a/b/c", where = where)
 existsProjectOption(id = "a/b/c/d", where = where)
 existsProjectOption(id = "c/d/e", where = where)
 
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+where <- new.env()
+setProjectOption(id = "a/b/c", value = 10, where = where, sub_id = "sub")
+existsProjectOption(id = "a/b/c", where = where, sub_id = "sub")
+existsProjectOption(id = "a/b/c/d", where = where, sub_id = "sub")
+existsProjectOption(id = "c/d/e", where = where, sub_id = "sub")
+
 }

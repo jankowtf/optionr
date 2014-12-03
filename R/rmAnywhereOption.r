@@ -108,7 +108,7 @@ setMethod(
 #' @param id \code{\link{character}}.
 #' @param where \code{\link{ANY}}.
 #' @return See method 
-#'    \code{\link[optionr]{rmAnywhereOption-char-char-method}}
+#'    \code{\link[optionr]{rmAnywhereOption-char-any-method}}
 #' @example inst/examples/rmAnywhereOption.r
 #' @seealso \code{
 #'    \link[optionr]{rmAnywhereOption}
@@ -133,6 +133,60 @@ setMethod(
  
   if (is.null(where$id)) {
     conditionr::signalCondition(
+      condition = "Invalid",
+      msg = c(
+        Reason = "cannot determine value of `where`"
+      ),
+      ns = "optionr",
+      type = "error"
+    )
+  }        
+    
+  rmAnywhereOption(
+    id = id,
+    where = where$id,
+    strict = strict,
+    ...
+  )    
+    
+  }
+)
+
+#' @title
+#' Remove Free Option (char-env)
+#'
+#' @description 
+#' See generic: \code{\link[optionr]{rmAnywhereOption}}
+#'      
+#' @inheritParams rmAnywhereOption
+#' @param id \code{\link{character}}.
+#' @param where \code{\link{environment}}.
+#' @return See method 
+#'    \code{\link[optionr]{rmAnywhereOption-char-char-method}}
+#' @example inst/examples/rmAnywhereOption.r
+#' @seealso \code{
+#'    \link[optionr]{rmAnywhereOption}
+#' }
+#' @template author
+#' @template references
+#' @aliases rmAnywhereOption-char-env-method
+#' @import conditionr
+#' @export
+setMethod(
+  f = "rmAnywhereOption", 
+  signature = signature(
+    id = "character",
+    where = "environment"
+  ), 
+  definition = function(
+    id,
+    where,
+    strict,
+    ...
+  ) {
+ 
+  if (is.null(where)) {
+    conditionr::signalCondition(
       condition = "MissingIdField",
       msg = c(
         Reason = "name/ID field is missing, can not determine determine parent option"
@@ -144,7 +198,7 @@ setMethod(
     
   rmAnywhereOption(
     id = id,
-    where = where$id,
+    where = where,
     strict = strict,
     ...
   )    

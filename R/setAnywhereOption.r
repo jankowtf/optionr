@@ -212,9 +212,9 @@ setMethod(
     
   if (is.null(where$id)) {
     conditionr::signalCondition(
-      condition = "MissingIdField",
+      condition = "Invalid",
       msg = c(
-        Reason = "name/ID field is missing, can not determine determine parent option"
+        Reason = "cannot determine value of `where`"
       ),
       ns = "optionr",
       type = "error"
@@ -235,6 +235,67 @@ setMethod(
     typed = typed,
     ...
   )    
+    
+  }
+)
+
+#' @title
+#' Set Anywhere Option (char-any-env)
+#'
+#' @description 
+#' See generic: \code{\link[optionr]{setAnywhereOption}}
+#'      
+#' @inheritParams setAnywhereOption
+#' @param id \code{\link{character}}.
+#' @param value \code{\link{ANY}}.
+#' @param where \code{\link{environment}}.
+#' @return See method
+#'    \code{\link{setAnywhereOption-char-any-char-method}}.
+#' @example inst/examples/setAnywhereOption.r
+#' @seealso \code{
+#'    \link[optionr]{setAnywhereOption}
+#' }
+#' @template author
+#' @template references
+#' @aliases setAnywhereOption-char-any-env-method
+#' @import conditionr
+#' @export
+setMethod(
+  f = "setAnywhereOption", 
+  signature = signature(
+    id = "character",
+    value = "ANY",
+    where = "environment"
+  ), 
+  definition = function(
+    id,
+    value,
+    where,
+    fail_value,
+    force,
+    gap,
+    must_exist,
+    reactive,
+    return_status,
+    strict,
+    typed,
+    ...
+  ) {
+    
+  setNested(
+    id = id, 
+    value = value, 
+    where = where, 
+    fail_value = fail_value,
+    force = force,
+    gap = gap,
+    must_exist = must_exist,
+    return_status = return_status,
+    reactive = reactive,
+    strict = strict,
+    typed = typed,
+    ...
+  )  
     
   }
 )
@@ -282,6 +343,7 @@ setMethod(
   ) {
     
   container <- ensureOptionContainer(id = where, check = FALSE)
+  
   setNested(
     id = id, 
     value = value, 

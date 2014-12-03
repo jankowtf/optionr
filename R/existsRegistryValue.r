@@ -19,6 +19,9 @@
 #'    suitable methods in the context of managing options are defined 
 #'    (see other methods of this package that have signature arguments 
 #'    \code{id} or \code{where}).  
+#' @param sub_id \code{\link{character}}.
+#'    Optional ID for a sub layer. Useful for a hub-like option container 
+#'    structure. 
 #' @param default \code{\link{ANY}}. 
 #'    Value to be returned if option does not exist. 
 #'    See \code{\link[base]{getOption}} and \code{\link[nestr]{getNested}}.
@@ -53,6 +56,7 @@ setGeneric(
     where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `where`")
     }),
+    sub_id = character(),
     default = NULL,
     strict = c(0, 1, 2), 
     ...
@@ -89,6 +93,7 @@ setMethod(
   definition = function(
     id,
     where,
+    sub_id,
     default,
     strict,
     ...
@@ -97,6 +102,7 @@ setMethod(
   existsRegistryValue(
     id = id,
     where = where,
+    sub_id = sub_id,
     default = default,
     strict = strict,
     ...
@@ -111,11 +117,11 @@ setMethod(
 #' @description 
 #' See generic: \code{\link[optionr]{existsRegistryValue}}
 #'      
-#' @inheritParams existsRegistryValue
+#' @inheritParams existsMetaValuen
 #' @param id \code{\link{character}}.
 #' @param where \code{\link{ANY}}.
 #' @return See method 
-#'    \code{\link[optionr]{existsRegistryValue-char-char-method}}
+#'    \code{\link[optionr]{existsRegistryValue-char-env-method}}
 #' @example inst/examples/existsRegistryValue.r
 #' @seealso \code{
 #'    \link[optionr]{existsRegistryValue}
@@ -134,14 +140,73 @@ setMethod(
   definition = function(
     id,
     where,
+    strict,
+    ...
+  ) {
+ 
+  if (is.null(where$id)) {
+    conditionr::signalCondition(
+      condition = "Invalid",
+      msg = c(
+        Reason = "cannot determine value for `where`"
+      ),
+      ns = "optionr",
+      type = "error"
+    )
+  }        
+    
+  existsRegistryValue(
+    id = id,
+    where = where$id,
+    strict = strict,
+    ...
+  )  
+    
+  }
+)
+
+#' @title
+#' Check Existence of Registry Value (char-env)
+#'
+#' @description 
+#' See generic: \code{\link[optionr]{existsRegistryValue}}
+#'      
+#' @inheritParams existsRegistryValue
+#' @param id \code{\link{character}}.
+#' @param where \code{\link{environment}}.
+#' @return See method 
+#'    \code{\link[optionr]{existsRegistryValue-char-char-method}}
+#' @example inst/examples/existsRegistryValue.r
+#' @seealso \code{
+#'    \link[optionr]{existsRegistryValue}
+#' }
+#' @template author
+#' @template references
+#' @aliases existsRegistryValue-char-env-method
+#' @import conditionr
+#' @export
+setMethod(
+  f = "existsRegistryValue", 
+  signature = signature(
+    id = "character",
+    where = "environment"
+  ), 
+  definition = function(
+    id,
+    where,
     default,
     strict,
     ...
   ) {
  
+  sub_id <- as.character(sub_id)    
   existsAnywhereOption(
-    id = file.path(".registry", id),
-    where = where$id,
+    id = if (!length(sub_id)) {
+      file.path(".registry", id)
+    } else {
+      file.path(sub_id, ".registry", id)      
+    },
+    where = where,
     default = default,
     strict = strict,
     ...
@@ -185,8 +250,13 @@ setMethod(
     ...
   ) {
 
+  sub_id <- as.character(sub_id)    
   existsAnywhereOption(
-    id = file.path(".registry", id),
+    id = if (!length(sub_id)) {
+      file.path(".registry", id)
+    } else {
+      file.path(sub_id, ".registry", id)      
+    },
     where = where,
     default = default,
     strict = strict,

@@ -28,7 +28,7 @@
 }
 \value{
 See method
-   \code{\link[optionr]{rmAnywhereOption-char-char-method}}
+   \code{\link[optionr]{rmAnywhereOption-char-any-method}}
 }
 \description{
 See generic: \code{\link[optionr]{rmAnywhereOption}}

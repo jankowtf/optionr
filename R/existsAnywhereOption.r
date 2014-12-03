@@ -109,7 +109,7 @@ setMethod(
 #' @param id \code{\link{character}}.
 #' @param where \code{\link{ANY}}.
 #' @return See method 
-#'    \code{\link[optionr]{existsAnywhereOption-char-char-method}}
+#'    \code{\link[optionr]{existsAnywhereOption-char-env-method}}
 #' @example inst/examples/existsAnywhereOption.r
 #' @seealso \code{
 #'    \link[optionr]{existsAnywhereOption}
@@ -134,9 +134,9 @@ setMethod(
  
   if (is.null(where$id)) {
     conditionr::signalCondition(
-      condition = "MissingIdField",
+      condition = "Invalid",
       msg = c(
-        Reason = "name/ID field is missing, can not determine determine parent option"
+        Reason = "cannot determine value for `where`"
       ),
       ns = "optionr",
       type = "error"
@@ -148,7 +148,49 @@ setMethod(
     where = where$id,
     strict = strict,
     ...
-  )    
+  )  
+    
+  }
+)
+
+#' @title
+#' Check Existence of an Anywhere Option (char-env)
+#'
+#' @description 
+#' See generic: \code{\link[optionr]{existsAnywhereOption}}
+#'      
+#' @inheritParams existsAnywhereOption
+#' @param id \code{\link{character}}.
+#' @param where \code{\link{environment}}.
+#' @return See method 
+#'    \code{\link[optionr]{existsAnywhereOption-char-env-method}}
+#' @example inst/examples/existsAnywhereOption.r
+#' @seealso \code{
+#'    \link[optionr]{existsAnywhereOption}
+#' }
+#' @template author
+#' @template references
+#' @aliases existsAnywhereOption-char-env-method
+#' @import conditionr
+#' @export
+setMethod(
+  f = "existsAnywhereOption", 
+  signature = signature(
+    id = "character",
+    where = "environment"
+  ), 
+  definition = function(
+    id,
+    where,
+    strict,
+    ...
+  ) {
+      
+  existsNested(
+    id = id, 
+    where = where, 
+    strict = strict
+  ) 
     
   }
 )

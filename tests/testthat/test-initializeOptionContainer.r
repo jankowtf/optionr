@@ -147,3 +147,44 @@ test_that("initializeOptionContainer/interface test", {
   on.exit(setwd(wd_0))
   
 })
+
+##------------------------------------------------------------------------------
+context("initializeOptionContainer/sub ID")
+##------------------------------------------------------------------------------
+
+test_that("initializeOptionContainer/sub ID", {
+  
+  if (basename(getwd()) == "testthat") {
+    wd_0 <- setwd("data/test.package")
+  } else {
+    wd_0 <- setwd("tests/testthat/data/test.package")
+  }
+  
+  id <- "test"
+  sub_id <- "a"
+  options(".test" = NULL)
+  expect_is(initializeOptionContainer(id = id, sub_id = sub_id), "environment")
+  expect_identical(getOption(paste0(".", id))$options, NULL)  
+  expect_is(getOption(paste0(".", id))[[sub_id]]$options, "environment")  
+  expect_identical(getOption(paste0(".", id))$.meta, NULL)  
+  expect_is(getOption(paste0(".", id))[[sub_id]]$.meta, "environment")  
+  expect_identical(getOption(paste0(".", id))$.registry, NULL)  
+  expect_is(getOption(paste0(".", id))[[sub_id]]$.registry, "environment")  
+  options(".test" = NULL)
+  
+  id <- "test"
+  sub_id <- "a"
+  options("test" = NULL)
+  expect_is(initializeOptionContainer(id = id, sub_id = sub_id, 
+    hidden = FALSE), "environment")
+  expect_identical(getOption(paste0(".", id))$options, NULL)  
+  expect_is(getOption(id)[[sub_id]]$options, "environment")  
+  expect_identical(getOption(id)$.meta, NULL)  
+  expect_is(getOption(id)[[sub_id]]$.meta, "environment")  
+  expect_identical(getOption(id)$.registry, NULL)  
+  expect_is(getOption(id)[[sub_id]]$.registry, "environment")  
+  options("test" = NULL)
+  
+  on.exit(setwd(wd_0))
+  
+})

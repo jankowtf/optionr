@@ -7,9 +7,10 @@
 \usage{
 \S4method{setMetaValue}{character,ANY,missing}(id, value,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
-      stop("Invalid default value for `where`") }), fail_value = NULL,
-  force = FALSE, gap = TRUE, must_exist = FALSE, reactive = FALSE,
-  return_status = TRUE, strict = c(0, 1, 2), typed = FALSE, ...)
+      stop("Invalid default value for `where`") }), sub_id = character(),
+  fail_value = NULL, force = FALSE, gap = TRUE, must_exist = FALSE,
+  reactive = FALSE, return_status = TRUE, strict = c(0, 1, 2),
+  typed = FALSE, ...)
 }
 \arguments{
 \item{id}{\code{\link{character}}.}
@@ -17,6 +18,10 @@
 \item{value}{\code{\link{ANY}}.}
 
 \item{where}{\code{\link{missing}}.}
+
+\item{sub_id}{\code{\link{character}}.
+Optional ID for a sub layer. Useful for a hub-like option container
+structure.}
 
 \item{fail_value}{\code{\link{ANY}}.
 Value that is returned if assignment failed and \code{return_status = FALSE}.}
@@ -81,7 +86,34 @@ See generic: \code{\link[optionr]{setMetaValue}}
 \examples{
 \dontrun{
 
-## TODO: add example
+##------------------------------------------------------------------------------
+## Default location of option container //
+##------------------------------------------------------------------------------
+
+## NOTE
+## Obmitting `where` (and `id` in `initializeOptionContainer()`) in the all 
+## calls will assign the overall option container to the package/project 
+## name (if `hidden = TRUE` it is additionally prepended by a `.`)
+
+initializeOptionContainer(overwrite = TRUE)
+setMetaValue(id = "x_1", value = 10)
+getMetaValue(id = "x_1")
+
+##------------------------------------------------------------------------------
+## Explicit location of option container //
+##------------------------------------------------------------------------------
+
+initializeOptionContainer(id = "test", overwrite = TRUE)
+setMetaValue(id = "x_1", value = 10, where = "test")
+getMetaValue(id = "x_1", where = "test")
+
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+initializeOptionContainer(sub_id = "a", overwrite = TRUE)
+setMetaValue(id = "x_1", value = 10, sub_id = "a")
+getMetaValue(id = "x_1", sub_id = "a")
 
 }
 }

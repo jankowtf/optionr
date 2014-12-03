@@ -40,4 +40,15 @@ existsMetaValue(id = "a/b/c", where = where)
 existsMetaValue(id = "a/b/c/d", where = where)
 existsMetaValue(id = "c/d/e", where = where)
 
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+where <- new.env()
+setMetaValue(id = "a/b/c", value = 10, where = where, sub_id = "sub")
+ls(where)
+existsMetaValue(id = "a/b/c", where = where, sub_id = "sub")
+existsMetaValue(id = "a/b/c/d", where = where, sub_id = "sub")
+existsMetaValue(id = "c/d/e", where = where, sub_id = "sub")
+
 }

@@ -16,6 +16,9 @@
 #'    suitable methods in the context of managing options are defined 
 #'    (see other methods of this package that have signature arguments 
 #'    \code{id} or \code{where}).  
+#' @param sub_id \code{\link{character}}.
+#'    Optional ID for a sub layer. Useful for a hub-like option container 
+#'    structure.
 #' @param default \code{\link{ANY}}. 
 #'    Value to be returned if option does not exist. 
 #'    See \code{\link[base]{getOption}} and \code{\link[nestr]{getNested}}.
@@ -29,7 +32,7 @@
 #' 			\item{2: }{ignore and with error}
 #'   	}
 #' @template threedots
-#' @example inst/examples/getProjectOption.r
+#' @example inst/examples/setProjectOption.r
 #' @seealso \code{
 #'   	\link[optionr]{getProjectOption-char-char-method},
 #'    \link[optionr]{setProjectOption},
@@ -51,6 +54,7 @@ setGeneric(
     where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `where`")
     }),
+    sub_id = character(),
     default = NULL,
     strict = c(0, 1, 2), 
     ...
@@ -70,7 +74,7 @@ setGeneric(
 #' @param where \code{\link{missing}}.
 #' @return See method 
 #'    \code{\link[optionr]{getProjectOption-char-char-method}}
-#' @example inst/examples/getProjectOption.r
+#' @example inst/examples/setProjectOption.r
 #' @seealso \code{
 #'    \link[optionr]{getProjectOption}
 #' }
@@ -87,6 +91,7 @@ setMethod(
   definition = function(
     id,
     where,
+    sub_id = character(),
     default,
     strict,
     ...
@@ -95,6 +100,7 @@ setMethod(
   getProjectOption(
     id = id,
     where = where,
+    sub_id = sub_id,
     default = default,
     strict = strict,
     ...
@@ -113,8 +119,8 @@ setMethod(
 #' @param id \code{\link{character}}.
 #' @param where \code{\link{ANY}}.
 #' @return See method 
-#'    \code{\link[optionr]{getProjectOption-char-char-method}}
-#' @example inst/examples/getProjectOption.r
+#'    \code{\link[optionr]{getProjectOption-char-env-method}}
+#' @example inst/examples/setProjectOption.r
 #' @seealso \code{
 #'    \link[optionr]{getProjectOption}
 #' }
@@ -137,9 +143,71 @@ setMethod(
     ...
   ) {
  
-  getAnywhereOption(
-    id = file.path("options", id),
+  if (is.null(where$id)) {
+    conditionr::signalCondition(
+      condition = "Invalid",
+      msg = c(
+        Reason = "cannot determine value of `where`"
+      ),
+      ns = "optionr",
+      type = "error"
+    )
+  }        
+    
+  getProjectOption(
+    id = id,
     where = where$id,
+    default = default,
+    strict = strict,
+    ...
+  )  
+    
+  }
+)
+
+#' @title
+#' Get Project Option (char-env)
+#'
+#' @description 
+#' See generic: \code{\link[optionr]{getProjectOption}}
+#'      
+#' @inheritParams getProjectOption
+#' @param id \code{\link{character}}.
+#' @param where \code{\link{environment}}.
+#' @return See method 
+#'    \code{\link[optionr]{getProjectOption-char-char-method}}
+#' @example inst/examples/setProjectOption.r
+#' @seealso \code{
+#'    \link[optionr]{getProjectOption}
+#' }
+#' @template author
+#' @template references
+#' @aliases getProjectOption-char-env-method
+#' @import conditionr
+#' @export
+setMethod(
+  f = "getProjectOption", 
+  signature = signature(
+    id = "character",
+    where = "environment"
+  ), 
+  definition = function(
+    id,
+    where,
+    sub_id,
+    default,
+    strict,
+    ...
+  ) {
+ 
+  sub_id <- as.character(sub_id)
+  getAnywhereOption(
+    id = if (!length(sub_id)) {
+      file.path("options", id)
+    } else {
+      file.path(sub_id, "options", id)
+    },
+    where = where,
     default = default,
     strict = strict,
     ...
@@ -161,7 +229,7 @@ setMethod(
 #' 		and non-existing component the value of \code{default} unless 
 #' 		\code{strict == 1} in which case a warning is issued or
 #' 		\code{strict == 2} in which case an error is thrown.
-#' @example inst/examples/getProjectOption.r
+#' @example inst/examples/setProjectOption.r
 #' @seealso \code{
 #'    \link[optionr]{getProjectOption}
 #' }
@@ -183,8 +251,13 @@ setMethod(
     ...
   ) {
 
+  sub_id <- as.character(sub_id)
   getAnywhereOption(
-    id = file.path("options", id),
+    id = if (!length(sub_id)) {
+      file.path("options", id)
+    } else {
+      file.path(sub_id, "options", id)
+    },
     where = where,
     default = default,
     strict = strict,

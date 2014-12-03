@@ -7,13 +7,17 @@
 \usage{
 \S4method{getMetaValue}{character,missing}(id,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
-      stop("Invalid default value for `where`") }), default = NULL,
-  strict = c(0, 1, 2), ...)
+      stop("Invalid default value for `where`") }), sub_id = character(),
+  default = NULL, strict = c(0, 1, 2), ...)
 }
 \arguments{
 \item{id}{\code{\link{character}}.}
 
 \item{where}{\code{\link{missing}}.}
+
+\item{sub_id}{\code{\link{character}}.
+Optional ID for a sub layer. Useful for a hub-like option container
+structure.}
 
 \item{default}{\code{\link{ANY}}.
 Value to be returned if option does not exist.
@@ -41,7 +45,34 @@ See generic: \code{\link[optionr]{getMetaValue}}
 \examples{
 \dontrun{
 
-## TODO: add example
+##------------------------------------------------------------------------------
+## Default location of option container //
+##------------------------------------------------------------------------------
+
+## NOTE
+## Obmitting `where` (and `id` in `initializeOptionContainer()`) in the all 
+## calls will assign the overall option container to the package/project 
+## name (if `hidden = TRUE` it is additionally prepended by a `.`)
+
+initializeOptionContainer(overwrite = TRUE)
+setMetaValue(id = "x_1", value = 10)
+getMetaValue(id = "x_1")
+
+##------------------------------------------------------------------------------
+## Explicit location of option container //
+##------------------------------------------------------------------------------
+
+initializeOptionContainer(id = "test", overwrite = TRUE)
+setMetaValue(id = "x_1", value = 10, where = "test")
+getMetaValue(id = "x_1", where = "test")
+
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+initializeOptionContainer(sub_id = "a", overwrite = TRUE)
+setMetaValue(id = "x_1", value = 10, sub_id = "a")
+getMetaValue(id = "x_1", sub_id = "a")
 
 }
 }
