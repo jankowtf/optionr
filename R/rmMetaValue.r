@@ -16,6 +16,9 @@
 #'    suitable methods in the context of managing options are defined 
 #'    (see other methods of this package that have signature arguments 
 #'    \code{id} or \code{where}).  
+#' @param sub_id \code{\link{character}}.
+#'    Optional ID for a sub layer. Useful for a hub-like option container 
+#'    structure.
 #' @param strict \code{\link{logical}}.
 #'     Controls what happens when \code{id} points to a non-existing meta object:
 #'    \itemize{
@@ -48,6 +51,7 @@ setGeneric(
     where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `where`")
     }),
+    sub_id = character(),
     strict = c(0, 1, 2), 
     ...
   ) {
@@ -83,6 +87,7 @@ setMethod(
   definition = function(
     id,
     where,
+    sub_id,
     strict,
     ...
   ) {
@@ -90,6 +95,7 @@ setMethod(
   rmMetaValue(
     id = id,
     where = where,
+    sub_id = sub_id,
     strict = strict,
     ...
   )    
@@ -107,7 +113,7 @@ setMethod(
 #' @param id \code{\link{character}}.
 #' @param where \code{\link{ANY}}.
 #' @return See method 
-#'    \code{\link[optionr]{rmMetaValue-char-char-method}}
+#'    \code{\link[optionr]{rmMetaValue-char-any-method}}
 #' @example inst/examples/rmMetaValue.r
 #' @seealso \code{
 #'    \link[optionr]{rmMetaValue}
@@ -130,9 +136,69 @@ setMethod(
     ...
   ) {
  
-  rmAnywhereOption(
-    id = file.path(".meta", id),
+  if (is.null(where$id)) {
+    conditionr::signalCondition(
+      condition = "Invalid",
+      msg = c(
+        Reason = "cannot determine value of `where`"
+      ),
+      ns = "optionr",
+      type = "error"
+    )
+  }        
+    
+  rmMetaValue(
+    id = id,
     where = where$id,
+    strict = strict,
+    ...
+  )    
+    
+  }
+)
+
+#' @title
+#' Remove Meta Value (char-env)
+#'
+#' @description 
+#' See generic: \code{\link[optionr]{rmMetaValue}}
+#'      
+#' @inheritParams rmMetaValue
+#' @param id \code{\link{character}}.
+#' @param where \code{\link{environment}}.
+#' @return See method 
+#'    \code{\link[optionr]{rmMetaValue-char-char-method}}
+#' @example inst/examples/rmMetaValue.r
+#' @seealso \code{
+#'    \link[optionr]{rmMetaValue}
+#' }
+#' @template author
+#' @template references
+#' @aliases rmMetaValue-char-env-method
+#' @import conditionr
+#' @export
+setMethod(
+  f = "rmMetaValue", 
+  signature = signature(
+    id = "character",
+    where = "environment"
+  ), 
+  definition = function(
+    id,
+    where,
+    sub_id,
+    strict,
+    ...
+  ) {
+ 
+  sub_id <- as.character(sub_id)    
+  rmAnywhereOption(
+    id = if (!length(sub_id)) {
+      file.path(".meta", id)
+    } else {
+      file.path(sub_id, ".meta", id)
+    },
+    where = where,
     strict = strict,
     ...
   )    
@@ -170,12 +236,18 @@ setMethod(
   definition = function(
     id,
     where,
+    sub_id,
     strict,
     ...
   ) {
 
+  sub_id <- as.character(sub_id)    
   rmAnywhereOption(
-    id = file.path(".meta", id),
+    id = if (!length(sub_id)) {
+      file.path(".meta", id)
+    } else {
+      file.path(sub_id, ".meta", id)
+    },
     where = where,
     strict = strict,
     ...

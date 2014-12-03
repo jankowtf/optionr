@@ -7,33 +7,17 @@
 \usage{
 \S4method{existsMetaValue}{character,ANY}(id,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
-      stop("Invalid default value for `where`") }), default = NULL,
-  strict = c(0, 1, 2), ...)
+      stop("Invalid default value for `where`") }), sub_id = character(),
+  default = NULL, strict = c(0, 1, 2), ...)
 }
 \arguments{
 \item{id}{\code{\link{character}}.}
 
 \item{where}{\code{\link{ANY}}.}
-
-\item{default}{\code{\link{ANY}}.
-Value to be returned if option does not exist.
-See \code{\link[base]{getOption}} and \code{\link[nestr]{getNested}}.}
-
-\item{strict}{\code{\link{logical}}.
- Controls what happens when \code{id} points to a non-existing meta object:
-\itemize{
-     \item{0: }{ignore and return \code{FALSE} to signal that the
-             assignment process was not successful or \code{fail_value} depending
-             on the value of \code{return_status}}
-         \item{1: }{ignore and with warning and return \code{FALSE}}
-         \item{2: }{ignore and with error}
-   }}
-
-\item{...}{Further arguments to be passed to subsequent functions/methods.}
 }
 \value{
 See method
-   \code{\link[optionr]{existsMetaValue-char-char-method}}
+   \code{\link[optionr]{existsMetaValue-char-env-method}}
 }
 \description{
 See generic: \code{\link[optionr]{existsMetaValue}}
@@ -80,6 +64,17 @@ setMetaValue(id = "a/b/c", value = 10, where = where)
 existsMetaValue(id = "a/b/c", where = where)
 existsMetaValue(id = "a/b/c/d", where = where)
 existsMetaValue(id = "c/d/e", where = where)
+
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+where <- new.env()
+setMetaValue(id = "a/b/c", value = 10, where = where, sub_id = "sub")
+ls(where)
+existsMetaValue(id = "a/b/c", where = where, sub_id = "sub")
+existsMetaValue(id = "a/b/c/d", where = where, sub_id = "sub")
+existsMetaValue(id = "c/d/e", where = where, sub_id = "sub")
 
 }
 }

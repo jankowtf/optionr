@@ -94,3 +94,27 @@ test_that("ensureOptionContainer/interface test", {
   })
   
 })
+
+##------------------------------------------------------------------------------
+context("ensureOptionContainer/sub ID")
+##------------------------------------------------------------------------------
+
+test_that("ensureOptionContainer/sub ID", {
+
+  if (basename(getwd()) == "testthat") {
+    wd_0 <- setwd("data/test.package")
+  } else {
+    wd_0 <- setwd("tests/testthat/data/test.package")
+  }
+  
+  options(".test.package" = NULL)
+  expect_is(res <- ensureOptionContainer(sub_id = "a"), "environment")
+  expect_true("a" %in% ls(res))
+  expect_error(ensureOptionContainer(check = TRUE))
+  
+  on.exit({
+    options(".test.package" = NULL)
+    setwd(wd_0)
+  })
+  
+})

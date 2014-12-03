@@ -40,4 +40,14 @@ existsRegistryValue(id = "a/b/c", where = where)
 existsRegistryValue(id = "a/b/c/d", where = where)
 existsRegistryValue(id = "c/d/e", where = where)
 
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+where <- new.env()
+setRegistryValue(id = "a/b/c", value = 10, where = where, sub_id = "sub")
+existsRegistryValue(id = "a/b/c", where = where, sub_id = "sub")
+existsRegistryValue(id = "a/b/c/d", where = where, sub_id = "sub")
+existsRegistryValue(id = "c/d/e", where = where, sub_id = "sub")
+
 }

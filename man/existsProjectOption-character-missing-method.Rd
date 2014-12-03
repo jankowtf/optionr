@@ -7,13 +7,17 @@
 \usage{
 \S4method{existsProjectOption}{character,missing}(id,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
-      stop("Invalid default value for `where`") }), default = NULL,
-  strict = c(0, 1, 2), ...)
+      stop("Invalid default value for `where`") }), sub_id = character(),
+  default = NULL, strict = c(0, 1, 2), ...)
 }
 \arguments{
 \item{id}{\code{\link{character}}.}
 
 \item{where}{\code{\link{missing}}.}
+
+\item{sub_id}{\code{\link{character}}.
+Optional ID for a sub layer. Useful for a hub-like option container
+structure.}
 
 \item{default}{\code{\link{ANY}}.
 Value to be returned if option does not exist.
@@ -80,6 +84,16 @@ setProjectOption(id = "a/b/c", value = 10, where = where)
 existsProjectOption(id = "a/b/c", where = where)
 existsProjectOption(id = "a/b/c/d", where = where)
 existsProjectOption(id = "c/d/e", where = where)
+
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+where <- new.env()
+setProjectOption(id = "a/b/c", value = 10, where = where, sub_id = "sub")
+existsProjectOption(id = "a/b/c", where = where, sub_id = "sub")
+existsProjectOption(id = "a/b/c/d", where = where, sub_id = "sub")
+existsProjectOption(id = "c/d/e", where = where, sub_id = "sub")
 
 }
 }

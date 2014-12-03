@@ -14,6 +14,9 @@
 #'    \code{\link[optionr]{initializeProjectOptions}}, 
 #'    \code{\link[optionr]{initializeMeta}} and 
 #'    \code{\link[optionr]{initializeRegistry}} exist.
+#' @param sub_id \code{\link{character}}.
+#'    Optional ID for a sub layer. Useful for a hub-like option container 
+#'    structure.
 #' @param check \code{\link{logical}}.
 #'    \code{TRUE}: check if an R option with name/ID according to the information
 #'    in \code{id} already exists (in which case an error is thrown); 
@@ -46,6 +49,7 @@ setGeneric(
     id = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `id`")
     }),
+    sub_id = character(),
     components = c("options", ".meta", ".registry"),
     check = TRUE,
     hidden = TRUE,
@@ -83,6 +87,7 @@ setMethod(
   ), 
   definition = function(
     id,
+    sub_id,
     components,
     check,
     hidden,
@@ -92,6 +97,7 @@ setMethod(
     
   return(initializeOptionContainer(
     id = id,
+    sub_id = sub_id,
     components = components,
     check = check,
     hidden = hidden,
@@ -127,6 +133,7 @@ setMethod(
   ), 
   definition = function(
     id,
+    sub_id,
     components,
     check,
     hidden,
@@ -135,7 +142,8 @@ setMethod(
   ) {
   
   components <- match.arg(components, c("options", ".meta", ".registry"),
-    several = TRUE)    
+    several = TRUE) 
+  sub_id <- as.character(sub_id)
   
   if (is.null(id$id)) {
     conditionr::signalCondition(
@@ -155,7 +163,11 @@ setMethod(
   } 
     
   out <- if (is.null(getOption(id_char))) {
-    opts <- ensureOptionContainer(id = id, check = check, hidden = hidden)
+    opts <- ensureOptionContainer(id = id, sub_id = sub_id, 
+      check = check, hidden = hidden)
+    if (length(sub_id)) {
+      opts <- opts[[sub_id]]
+    }
     if ("options" %in% components) {
       initializeProjectOptions(id = id, where = opts)
     }
@@ -171,6 +183,12 @@ setMethod(
     ## object is re-used again //
     if (overwrite) {
       opts <- getOption(id_char)  
+      if (length(sub_id)) {
+        if (!exists(sub_id, envir = opts, inherits = FALSE)) {
+          assign(sub_id, new.env(parent = emptyenv()), envir = opts)  
+        }
+        opts <- opts[[sub_id]]
+      }
       rm(list = ls(opts, all.names = TRUE), envir = opts)
       if ("options" %in% components) {
         initializeProjectOptions(id = id, where = opts)
@@ -183,7 +201,13 @@ setMethod(
       }
       opts
     } else {
-      getOption(id_char)  
+      opts <- getOption(id_char)  
+      if (!exists(sub_id, envir = opts, inherits = FALSE)) {
+          assign(sub_id, new.env(parent = emptyenv()), envir = opts)  
+        }
+      if (length(sub_id)) {
+        opts <- opts[[sub_id]]
+      }
     }
   }
   out
@@ -215,6 +239,7 @@ setMethod(
   ), 
   definition = function(
     id,
+    sub_id,
     components,
     check,
     hidden,
@@ -224,14 +249,22 @@ setMethod(
   
   components <- match.arg(components, c("options", ".meta", ".registry"),
     several.ok = TRUE)    
+  sub_id <- as.character(sub_id)
     
   id_0 <- id
   if (hidden) {
     id <- paste0(".", id)
   } 
-  
-  out <- if (is.null(getOption(id))) {
-    opts <- ensureOptionContainer(id = id_0, check = check, hidden = hidden)
+
+  out <- if (is.null(getOption(id))) {    
+    opts <- ensureOptionContainer(id = id_0, sub_id = sub_id, 
+      check = check, hidden = hidden)
+    if (length(sub_id)) {
+      if (!exists(sub_id, envir = opts, inherits = FALSE)) {
+        assign(sub_id, new.env(parent = emptyenv()), envir = opts)  
+      }
+      opts <- opts[[sub_id]]
+    }
     if ("options" %in% components) {
       initializeProjectOptions(where = opts)
     }
@@ -247,6 +280,12 @@ setMethod(
     ## object is re-used again //
     if (overwrite) {
       opts <- getOption(id)  
+      if (length(sub_id)) {
+        if (!exists(sub_id, envir = opts, inherits = FALSE)) {
+          assign(sub_id, new.env(parent = emptyenv()), envir = opts)  
+        }
+        opts <- opts[[sub_id]]
+      }
       rm(list = ls(opts, all.names = TRUE), envir = opts)
       if ("options" %in% components) {
         initializeProjectOptions(where = opts)
@@ -259,7 +298,13 @@ setMethod(
       }
       opts
     } else {
-      getOption(id)  
+      opts <- getOption(id)  
+      if (!exists(sub_id, envir = opts, inherits = FALSE)) {
+        assign(sub_id, new.env(parent = emptyenv()), envir = opts)  
+      }
+      if (length(sub_id)) {
+        opts <- opts[[sub_id]]
+      }
     }
   }
   out

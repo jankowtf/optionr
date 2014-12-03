@@ -1,0 +1,15 @@
+# CHANGES IN test.package VERSION 1.1
+
+## NEW FEATURES
+
+## BUG FIXES
+
+## MAJOR CHANGES
+
+## MINOR CHANGES
+
+## MISC
+
+-----
+
+

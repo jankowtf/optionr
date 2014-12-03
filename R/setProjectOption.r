@@ -18,6 +18,9 @@
 #'    suitable methods in the context of managing options are defined 
 #'    (see other methods of this package that have signature arguments 
 #'    \code{id} or \code{where}).  
+#' @param sub_id \code{\link{character}}.
+#'    Optional ID for a sub layer. Useful for a hub-like option container 
+#'    structure.
 #' @param fail_value \code{\link{ANY}}.
 #'     Value that is returned if assignment failed and \code{return_status = FALSE}.
 #' @param gap \code{\link{logical}}. 
@@ -90,6 +93,7 @@ setGeneric(
     where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
       stop("Invalid default value for `where`")
     }),
+    sub_id = character(),
     fail_value = NULL,
     force = FALSE,
     gap = TRUE,
@@ -135,6 +139,7 @@ setMethod(
     id,
     value,
     where,
+    sub_id,
     fail_value,
     force,
     gap,
@@ -150,6 +155,7 @@ setMethod(
     id = id,
     value = value,
     where = where,
+    sub_id = sub_id,
     fail_value = fail_value,
     force = force,
     gap = gap,
@@ -206,11 +212,90 @@ setMethod(
     typed,
     ...
   ) {
-
-  setAnywhereOption(
-    id = file.path("options", id),
+    
+  if (is.null(where$id)) {
+    conditionr::signalCondition(
+      condition = "Invalid",
+      msg = c(
+        Reason = "cannot determine value of `where`"
+      ),
+      ns = "optionr",
+      type = "error"
+    )
+  }    
+    
+  setProjectOption(
+    id = id,
     value = value,
     where = where$id,
+    fail_value = fail_value,
+    force = force,
+    gap = gap,
+    must_exist = must_exist,
+    return_status = return_status,
+    reactive = reactive,
+    strict = strict,
+    typed = typed,
+    ...
+  )    
+    
+  }
+)
+
+#' @title
+#' Set Project Option (char-any-env)
+#'
+#' @description 
+#' See generic: \code{\link[optionr]{setProjectOption}}
+#'      
+#' @inheritParams setProjectOption
+#' @param id \code{\link{character}}.
+#' @param value \code{\link{ANY}}.
+#' @param where \code{\link{environment}}.
+#' @return See method
+#'    \code{\link{setProjectOption-char-any-char-method}}.
+#' @example inst/examples/setProjectOption.r
+#' @seealso \code{
+#'    \link[optionr]{setProjectOption}
+#' }
+#' @template author
+#' @template references
+#' @aliases setProjectOption-char-any-env-method
+#' @import conditionr
+#' @export
+setMethod(
+  f = "setProjectOption", 
+  signature = signature(
+    id = "character",
+    value = "ANY",
+    where = "environment"
+  ), 
+  definition = function(
+    id,
+    value,
+    where,
+    sub_id,
+    fail_value,
+    force,
+    gap,
+    must_exist,
+    reactive,
+    return_status,
+    strict,
+    typed,
+    ...
+  ) {
+
+  sub_id <- as.character(sub_id)    
+  setAnywhereOption(
+    id = if (!length(sub_id)) {
+      file.path("options", id)
+    } else {
+      file.path(sub_id, "options", id)
+    },
+    value = value,
+    where = where,
+    sub_id = sub_id,
     fail_value = fail_value,
     force = force,
     gap = gap,
@@ -255,6 +340,7 @@ setMethod(
     id,
     value,
     where,
+    sub_id,
     fail_value,
     force,
     gap,
@@ -265,11 +351,17 @@ setMethod(
     typed,
     ...
   ) {
-    
+
+  sub_id <- as.character(sub_id)    
   setAnywhereOption(
-    id = file.path("options", id),
+    id = if (!length(sub_id)) {
+      file.path("options", id)
+    } else {
+      file.path(sub_id, "options", id)
+    },
     value = value,
     where = where,
+    sub_id = sub_id,
     fail_value = fail_value,
     force = force,
     gap = gap,

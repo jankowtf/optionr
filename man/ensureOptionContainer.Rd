@@ -5,8 +5,8 @@
 \usage{
 ensureOptionContainer(id = tryCatch(devtools::as.package(".")$package, error =
   function(cond) {     stop("Invalid default value for `id`") }),
-  container = new.env(), check = TRUE, hidden = TRUE, overwrite = FALSE,
-  ...)
+  container = new.env(), sub_id = character(), check = TRUE,
+  hidden = TRUE, overwrite = FALSE, ...)
 }
 \arguments{
 \item{id}{\strong{Signature argument}.
@@ -18,6 +18,10 @@ instance of a custom class for which a suitable methods are defined.}
 
 \item{container}{\strong{Signature argument}.
 Object containing container information.}
+
+\item{sub_id}{\code{\link{character}}.
+Optional ID for a sub layer. Useful for a hub-like option container
+structure.}
 
 \item{check}{\code{\link{logical}}.
 \code{TRUE}: check if an R option with name/ID according to the information
@@ -47,7 +51,7 @@ argument \code{id}.
 \dontrun{
 
 ##------------------------------------------------------------------------------
-## Default `id` //
+## Default ID //
 ##------------------------------------------------------------------------------
 
 options(".optionr" = NULL)
@@ -60,6 +64,30 @@ identical(getOption(".optionr"), res)
 
 ## Clean up //
 options(".optionr" = NULL)
+
+##------------------------------------------------------------------------------
+## Explicit ID //
+##------------------------------------------------------------------------------
+
+res <- ensureOptionContainer(id = "abcd")
+".abcd" \%in\% names(options())
+ensureOptionContainer(id = "abcd", overwrite = TRUE)
+identical(getOption(".abcd"), res)
+## --> identical environment object is reused --> ensures pass-by-references
+## keeps working even when `overwrite = TRUE`
+
+## Clean up //
+options(".abcd" = NULL)
+
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+res <- ensureOptionContainer(id = "abcd", sub_id = "a")
+"a" \%in\% ls(res)
+
+## Clean up //
+options(".abcd" = NULL)
 
 ##------------------------------------------------------------------------------
 ## Not hidden //

@@ -7,11 +7,15 @@ Management of customized (and nested) project/package options
 
 ```
 require("devtools")
-devtools::install_github("Rappster/conditionr")
-devtools::install_github("Rappster/nestr")
-devtools::install_github("Rappster/reactr")
-devtools::install_github("Rappster/typr")
 
+## Dependencies //
+devtools::install_github("Rappster/conditionr")
+devtools::install_github("Rappster/yamlr")
+devtools::install_github("Rappster/typr")
+devtools::install_github("Rappster/reactr")
+devtools::install_github("Rappster/nestr")
+
+## Actual package //
 devtools::install_github("Rappster/optionr")
 require("optionr")
 ```
@@ -157,6 +161,16 @@ setProjectOption(id = "dirs/wd", value = "c:/temp")
 getProjectOption(id = "dirs/reactive_subdir")
 ```
 
+### Sub IDs
+
+```
+setProjectOption(id = "x_1", value = TRUE, sub_id = "a")
+getProjectOption(id = "x_1", sub_id = "a")
+
+setProjectOption(id = "x/y", value = list(a = 1, b = 2), sub_id = "a")
+getProjectOption(id = "x/y", sub_id = "a")
+```
+
 -----
 
 ## Meta values 
@@ -176,6 +190,10 @@ getMetaValue(id = "a/b/c")
 identical(getMetaValue(id = "a/b/c"), container$.meta$a$b$c)
 rmMetaValue(id = "a/b/c")
 existsMetaValue(id = "a/b/c")
+
+## Sub ID //
+setMetaValue(id = "a/b/c", value = 20, sub_id = "a")
+getMetaValue(id = "a/b/c", sub_id = "a")
 ```
 
 -----
@@ -197,6 +215,10 @@ getRegistryValue(id = "a/b/c")
 identical(getRegistryValue(id = "a/b/c"), container$.registry$a$b$c)
 rmRegistryValue(id = "a/b/c")
 existsRegistryValue(id = "a/b/c")
+
+## Sub ID //
+setRegistryValue(id = "a/b/c", value = 20, sub_id = "a")
+getRegistryValue(id = "a/b/c", sub_id = "a")
 ```
 
 -----

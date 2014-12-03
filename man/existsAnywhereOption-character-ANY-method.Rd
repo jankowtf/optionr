@@ -28,7 +28,7 @@
 }
 \value{
 See method
-   \code{\link[optionr]{existsAnywhereOption-char-char-method}}
+   \code{\link[optionr]{existsAnywhereOption-char-env-method}}
 }
 \description{
 See generic: \code{\link[optionr]{existsAnywhereOption}}

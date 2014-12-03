@@ -14,6 +14,9 @@
 #'    instance of a custom class for which a suitable methods are defined.
 #' @param container \strong{Signature argument}.
 #'    Object containing container information.
+#' @param sub_id \code{\link{character}}.
+#'    Optional ID for a sub layer. Useful for a hub-like option container 
+#'    structure.
 #' @param check \code{\link{logical}}.
 #'    \code{TRUE}: check if an R option with name/ID according to the information
 #'    in \code{id} already exists (in which case an error is thrown); 
@@ -48,6 +51,7 @@ setGeneric(
       stop("Invalid default value for `id`")
     }),
     container = new.env(),
+    sub_id = character(),
     check = TRUE,
     hidden = TRUE,
     overwrite = FALSE,
@@ -85,6 +89,7 @@ setMethod(
   definition = function(
     id,
     container,
+    sub_id,
     check,
     hidden,
     overwrite,
@@ -94,6 +99,7 @@ setMethod(
   ensureOptionContainer(
     id = id,
     container = container,
+    sub_id = sub_id,
     check = check,
     hidden = hidden,
     overwrite = overwrite,
@@ -131,6 +137,7 @@ setMethod(
   definition = function(
     id,
     container,
+    sub_id,
     check,
     hidden,
     overwrite,
@@ -140,6 +147,7 @@ setMethod(
   ensureOptionContainer(
     id = id,
     container = container,
+    sub_id = sub_id,
     check = check,
     hidden = hidden,
     overwrite = overwrite,
@@ -177,11 +185,14 @@ setMethod(
   definition = function(
     id,
     container,
+    sub_id,
     check,
     hidden,
     overwrite,
     ...
   ) {
+  
+  sub_id <- as.character(sub_id)    
   
   if (is.null(id$id)) {
     conditionr::signalCondition(
@@ -212,10 +223,20 @@ setMethod(
   
   opts <- getOption(id$id)
   if (is.null(opts)) {
+    if (length(sub_id)) {
+      assign(sub_id, new.env(parent = emptyenv()), envir = container)
+    }
     eval(parse(text = sprintf("options(%s = container)", id$id)))
   } else {
     if (overwrite) {
       rm(list = ls(opts, all.names = TRUE), envir = opts)
+      if (length(sub_id)) {
+        assign(sub_id, new.env(parent = emptyenv()), envir = opts)
+      }
+    } else {
+      if (length(sub_id) && !sub_id %in% ls(opts, all.names = TRUE)) {
+        assign(sub_id, new.env(parent = emptyenv()), envir = opts)
+      }
     }
   }
   return(getOption(id$id))
@@ -251,6 +272,7 @@ setMethod(
   definition = function(
     id,
     container,
+    sub_id,
     check,
     hidden,
     overwrite,
@@ -275,10 +297,20 @@ setMethod(
   
   opts <- getOption(id)
   if (is.null(opts)) {
+    if (length(sub_id)) {
+      assign(sub_id, new.env(parent = emptyenv()), envir = container)
+    }
     eval(parse(text = sprintf("options(%s = container)", id)))
   } else {
     if (overwrite) {
       rm(list = ls(opts, all.names = TRUE), envir = opts)
+      if (length(sub_id)) {
+        assign(sub_id, new.env(parent = emptyenv()), envir = opts)
+      }
+    } else {
+      if (length(sub_id) && !sub_id %in% ls(opts, all.names = TRUE)) {
+        assign(sub_id, new.env(parent = emptyenv()), envir = opts)
+      }
     }
   }
   return(getOption(id))

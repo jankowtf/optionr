@@ -7,12 +7,17 @@
 \usage{
 \S4method{rmMetaValue}{character,missing}(id,
   where = tryCatch(devtools::as.package(".")$package, error = function(cond) {
-      stop("Invalid default value for `where`") }), strict = c(0, 1, 2), ...)
+      stop("Invalid default value for `where`") }), sub_id = character(),
+  strict = c(0, 1, 2), ...)
 }
 \arguments{
 \item{id}{\code{\link{character}}.}
 
 \item{where}{\code{\link{missing}}.}
+
+\item{sub_id}{\code{\link{character}}.
+Optional ID for a sub layer. Useful for a hub-like option container
+structure.}
 
 \item{strict}{\code{\link{logical}}.
  Controls what happens when \code{id} points to a non-existing meta object:

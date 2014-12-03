@@ -33,7 +33,7 @@ See \code{\link[base]{getOption}} and \code{\link[nestr]{getNested}}.}
 }
 \value{
 See method
-   \code{\link[optionr]{getAnywhereOption-char-char-method}}
+   \code{\link[optionr]{getAnywhereOption-char-env-method}}
 }
 \description{
 See generic: \code{\link[optionr]{getAnywhereOption}}

@@ -5,7 +5,7 @@
 \usage{
 existsRegistryValue(id, where = tryCatch(devtools::as.package(".")$package,
   error = function(cond) {     stop("Invalid default value for `where`") }),
-  default = NULL, strict = c(0, 1, 2), ...)
+  sub_id = character(), default = NULL, strict = c(0, 1, 2), ...)
 }
 \arguments{
 \item{id}{\strong{Signature argument}.
@@ -18,6 +18,10 @@ of a package/package project or an instance of a custom class for which
 suitable methods in the context of managing options are defined
 (see other methods of this package that have signature arguments
 \code{id} or \code{where}).}
+
+\item{sub_id}{\code{\link{character}}.
+Optional ID for a sub layer. Useful for a hub-like option container
+structure.}
 
 \item{default}{\code{\link{ANY}}.
 Value to be returned if option does not exist.
@@ -95,6 +99,16 @@ setRegistryValue(id = "a/b/c", value = 10, where = where)
 existsRegistryValue(id = "a/b/c", where = where)
 existsRegistryValue(id = "a/b/c/d", where = where)
 existsRegistryValue(id = "c/d/e", where = where)
+
+##------------------------------------------------------------------------------
+## Sub ID //
+##------------------------------------------------------------------------------
+
+where <- new.env()
+setRegistryValue(id = "a/b/c", value = 10, where = where, sub_id = "sub")
+existsRegistryValue(id = "a/b/c", where = where, sub_id = "sub")
+existsRegistryValue(id = "a/b/c/d", where = where, sub_id = "sub")
+existsRegistryValue(id = "c/d/e", where = where, sub_id = "sub")
 
 }
 }
